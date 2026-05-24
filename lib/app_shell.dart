@@ -230,7 +230,7 @@ class DashboardScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(20, 18, 20, 120),
         children: [
           _PageHeader(
-            title: 'BuddySplit',
+            title: 'clearsplit',
             subtitle: 'Split bills with friends, instantly',
             trailing: CircleAvatar(
               radius: 22,
@@ -426,7 +426,7 @@ class ActivityScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(20, 18, 20, 120),
         children: [
           const _PageHeader(
-            title: 'BuddySplit',
+            title: 'clearsplit',
             subtitle: 'Live feed of splits and reminders',
           ),
           const SizedBox(height: 18),
@@ -685,6 +685,20 @@ class GroupDetailScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
                   ),
                   child: const Icon(Icons.shopping_bag_rounded),
+                ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 54,
+                height: 54,
+                child: FilledButton(
+                  onPressed: () => showManageMembersSheet(context, controller, group),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFFEEF2FF),
+                    padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                  ),
+                  child: const Icon(Icons.manage_accounts_rounded),
                 ),
               ),
             ],
@@ -1968,6 +1982,79 @@ Future<void> showAddExpenseSheet(
           );
         },
       );
+    },
+  );
+}
+
+Future<void> showManageMembersSheet(BuildContext context, AppController controller, Group group) async {
+  final allPeople = controller.state.people;
+  final selected = <String>{...group.members};
+
+  await showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (sheetContext) {
+      return StatefulBuilder(builder: (context, setSheetState) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(width: 44, height: 4, decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(999))),
+                ),
+                const SizedBox(height: 18),
+                Text('Manage Members — ${group.name}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
+                const SizedBox(height: 12),
+                Flexible(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: allPeople.length,
+                    separatorBuilder: (_, _) => const Divider(height: 1),
+                    itemBuilder: (context, index) {
+                      final person = allPeople[index];
+                      final isMember = selected.contains(person.id);
+                      return CheckboxListTile(
+                        value: isMember,
+                        onChanged: (value) {
+                          setSheetState(() {
+                            if (value == true) {
+                              selected.add(person.id);
+                              controller.addMemberToGroup(group.id, person.id);
+                              _toast(context, 'Added ${person.name} to ${group.name}.');
+                            } else {
+                              selected.remove(person.id);
+                              controller.removeMemberFromGroup(group.id, person.id);
+                              _toast(context, 'Removed ${person.name} from ${group.name}.');
+                            }
+                          });
+                        },
+                        title: Text(person.name),
+                        secondary: _PersonAvatar(person: person, size: 36),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12),
+                FilledButton(
+                  onPressed: () => Navigator.of(sheetContext).pop(),
+                  style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48), backgroundColor: const Color(0xFF0F766E)),
+                  child: const Text('Done'),
+                ),
+              ],
+            ),
+          ),
+        );
+      });
     },
   );
 }

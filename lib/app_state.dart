@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-const _storageKey = 'buddysplit.state.v1';
+import 'services/local_state_store.dart';
 
 class Person {
   const Person({required this.id, required this.name, required this.avatar, required this.color});
@@ -356,10 +355,11 @@ class BalanceSummary {
 }
 
 class AppController extends ChangeNotifier {
-  AppController() {
+  AppController() : _store = LocalStateStore() {
     initialized = _loadInstance();
   }
 
+  final LocalStateStore _store;
   AppData _state = AppData.seed();
   bool _loaded = false;
   late final Future<void> initialized;
@@ -367,8 +367,7 @@ class AppController extends ChangeNotifier {
   AppData get state => _state;
 
   Future<void> _loadInstance() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_storageKey);
+    final raw = await _store.readState();
     if (raw != null) {
       try {
         _state = AppData.fromJson(jsonDecode(raw) as Map<String, dynamic>);
@@ -388,8 +387,7 @@ class AppController extends ChangeNotifier {
     if (!_loaded) {
       return;
     }
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_storageKey, jsonEncode(_state.toJson()));
+    await _store.writeState(jsonEncode(_state.toJson()));
   }
 
   void _update(AppData next) {
@@ -523,6 +521,24 @@ class AppController extends ChangeNotifier {
       members: [_state.me],
     );
     _update(_state.copyWith(groups: [..._state.groups, next]));
+  }
+
+  void addMemberToGroup(String groupId, String personId) {
+    final group = groupById(groupId);
+    if (group == null) return;
+    if (group.members.contains(personId)) return;
+    final updated = Group(id: group.id, name: group.name, emoji: group.emoji, members: [...group.members, personId]);
+    final nextGroups = _state.groups.map((g) => g.id == groupId ? updated : g).toList();
+    _update(_state.copyWith(groups: nextGroups));
+  }
+
+  void removeMemberFromGroup(String groupId, String personId) {
+    final group = groupById(groupId);
+    if (group == null) return;
+    if (!group.members.contains(personId)) return;
+    final updated = Group(id: group.id, name: group.name, emoji: group.emoji, members: group.members.where((m) => m != personId).toList());
+    final nextGroups = _state.groups.map((g) => g.id == groupId ? updated : g).toList();
+    _update(_state.copyWith(groups: nextGroups));
   }
 
   void markSettled(String id) {
