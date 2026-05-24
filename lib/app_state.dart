@@ -118,6 +118,8 @@ class Expense {
     required this.date,
     this.groupId,
     this.note,
+    this.splitMethod = 'equal',
+    this.splits = const {},
     this.settled = false,
     this.personal = false,
   });
@@ -131,6 +133,8 @@ class Expense {
   final String category;
   final DateTime date;
   final String? note;
+  final String splitMethod; // 'equal', 'amount', 'percentage'
+  final Map<String, double> splits; // personId -> amount/percentage
   final bool settled;
   final bool personal;
 
@@ -144,11 +148,14 @@ class Expense {
         'category': category,
         'date': date.millisecondsSinceEpoch,
         'note': note,
+        'splitMethod': splitMethod,
+        'splits': splits,
         'settled': settled,
         'personal': personal,
       };
 
   factory Expense.fromJson(Map<String, dynamic> json) {
+    final splits = json['splits'] as Map<String, dynamic>?;
     return Expense(
       id: json['id'] as String,
       title: json['title'] as String,
@@ -159,9 +166,19 @@ class Expense {
       category: json['category'] as String,
       date: DateTime.fromMillisecondsSinceEpoch((json['date'] as num).toInt()),
       note: json['note'] as String?,
+      splitMethod: (json['splitMethod'] as String?) ?? 'equal',
+      splits: splits != null ? splits.map((k, v) => MapEntry(k, (v as num).toDouble())) : {},
       settled: (json['settled'] as bool?) ?? false,
       personal: (json['personal'] as bool?) ?? false,
     );
+  }
+
+  double getParticipantShare(String participantId) {
+    if (splitMethod == 'equal') {
+      return amount / participants.length;
+    } else {
+      return splits[participantId] ?? 0;
+    }
   }
 }
 
@@ -528,11 +545,11 @@ class AppController extends ChangeNotifier {
         continue;
       }
 
-      final share = expense.amount / expense.participants.length;
       for (final participantId in expense.participants) {
         if (participantId == expense.paidBy) {
           continue;
         }
+        final share = expense.getParticipantShare(participantId);
         if (expense.paidBy == _state.me) {
           perPerson[participantId] = (perPerson[participantId] ?? 0) + share;
         } else if (participantId == _state.me) {
@@ -575,6 +592,8 @@ class AppController extends ChangeNotifier {
     required String category,
     String? groupId,
     String? note,
+    String splitMethod = 'equal',
+    Map<String, double> splits = const {},
     bool settled = false,
     bool personal = false,
     DateTime? date,
@@ -599,6 +618,8 @@ class AppController extends ChangeNotifier {
       category: category,
       date: date ?? DateTime.now(),
       note: note,
+      splitMethod: splitMethod,
+      splits: splits,
       settled: settled,
       personal: personal,
     );
@@ -646,6 +667,8 @@ class AppController extends ChangeNotifier {
               category: expense.category,
               date: expense.date,
               note: expense.note,
+              splitMethod: expense.splitMethod,
+              splits: expense.splits,
               settled: true,
               personal: expense.personal,
             ) : expense)

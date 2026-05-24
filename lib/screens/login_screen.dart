@@ -125,27 +125,14 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           const SizedBox(height: 8),
           Text(
-            'BuddySplit',
+            'clearsplit',
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
                 ),
           ),
           const SizedBox(height: 12),
-          const Text(
-            'Pick a demo user and open a separate local account. Each login uses its own seeded app state.',
-            style: TextStyle(color: Colors.white70, height: 1.4, fontSize: 16),
-          ),
-          const SizedBox(height: 24),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: const [
-              _FeaturePill(label: 'Multiple logins'),
-              _FeaturePill(label: 'Different user state'),
-              _FeaturePill(label: 'No backend'),
-            ],
-          ),
+          
         ],
       ),
     );

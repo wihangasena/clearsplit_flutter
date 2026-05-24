@@ -1802,6 +1802,9 @@ Future<void> showAddExpenseSheet(
   String selectedCategory = categories.first;
   String? selectedGroupId = initialGroupId ?? (controller.state.groups.isEmpty ? null : controller.state.groups.first.id);
   String selectedPayerId = controller.state.me;
+  String selectedSplitMethod = 'equal'; // 'equal', 'amount', 'percentage'
+  final Map<String, TextEditingController> splitControllers = {};
+  Set<String> selectedParticipants = {}; // Track selected participants
 
   await showModalBottomSheet<void>(
     context: context,
@@ -1814,6 +1817,18 @@ Future<void> showAddExpenseSheet(
           final payerOptions = isPersonal ? [controller.state.me] : (group?.members.isNotEmpty == true ? group!.members : [controller.state.me]);
           if (!payerOptions.contains(selectedPayerId)) {
             selectedPayerId = payerOptions.first;
+          }
+
+          // Initialize selected participants on first load
+          if (!isPersonal && selectedParticipants.isEmpty && group != null) {
+            selectedParticipants = {...group.members};
+          }
+
+          // Initialize split controllers if they don't exist
+          for (final participantId in selectedParticipants) {
+            if (!splitControllers.containsKey(participantId)) {
+              splitControllers[participantId] = TextEditingController();
+            }
           }
 
           return Padding(
@@ -1844,11 +1859,16 @@ Future<void> showAddExpenseSheet(
                       value: isPersonal,
                       onChanged: (value) => setSheetState(() {
                         isPersonal = value;
+                        selectedParticipants.clear();
                         if (isPersonal) {
                           selectedGroupId = null;
                           selectedPayerId = controller.state.me;
                         } else if (selectedGroupId == null && controller.state.groups.isNotEmpty) {
                           selectedGroupId = controller.state.groups.first.id;
+                          final firstGroup = controller.groupById(selectedGroupId!);
+                          if (firstGroup != null) {
+                            selectedParticipants = {...firstGroup.members};
+                          }
                         }
                       }),
                       title: const Text('Personal expense'),
@@ -1915,6 +1935,10 @@ Future<void> showAddExpenseSheet(
                                   if (nextGroup != null && !nextGroup.members.contains(selectedPayerId)) {
                                     selectedPayerId = nextGroup.members.first;
                                   }
+                                  // Reset selected participants to new group members
+                                  selectedParticipants = {...nextGroup!.members};
+                                  // Clear split controllers for new participants
+                                  splitControllers.clear();
                                 });
                               },
                       ),
@@ -1937,6 +1961,98 @@ Future<void> showAddExpenseSheet(
                           }
                           setSheetState(() => selectedPayerId = value);
                         },
+                      ),
+                    if (!isPersonal) const SizedBox(height: 12),
+                    if (!isPersonal) const Text('Split with', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    if (!isPersonal) const SizedBox(height: 8),
+                    if (!isPersonal)
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          children: [
+                            ...?group?.members.map((memberId) {
+                              final person = controller.personById(memberId);
+                              return CheckboxListTile(
+                                dense: true,
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(person?.name ?? memberId),
+                                value: selectedParticipants.contains(memberId),
+                                onChanged: (checked) {
+                                  setSheetState(() {
+                                    if (checked == true) {
+                                      selectedParticipants.add(memberId);
+                                    } else {
+                                      selectedParticipants.remove(memberId);
+                                    }
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ],
+                        ),
+                      ),
+                    if (!isPersonal) const SizedBox(height: 12),
+                    if (!isPersonal) const Text('Split method', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    if (!isPersonal) const SizedBox(height: 8),
+                    if (!isPersonal)
+                      Wrap(
+                        spacing: 8,
+                        children: [
+                          ChoiceChip(
+                            label: const Text('Equally'),
+                            selected: selectedSplitMethod == 'equal',
+                            onSelected: (selected) => setSheetState(() => selectedSplitMethod = 'equal'),
+                          ),
+                          ChoiceChip(
+                            label: const Text('By Amount'),
+                            selected: selectedSplitMethod == 'amount',
+                            onSelected: (selected) => setSheetState(() => selectedSplitMethod = 'amount'),
+                          ),
+                          ChoiceChip(
+                            label: const Text('By Percentage'),
+                            selected: selectedSplitMethod == 'percentage',
+                            onSelected: (selected) => setSheetState(() => selectedSplitMethod = 'percentage'),
+                          ),
+                        ],
+                      ),
+                    if (!isPersonal && selectedSplitMethod != 'equal') const SizedBox(height: 12),
+                    if (!isPersonal && selectedSplitMethod != 'equal')
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              selectedSplitMethod == 'amount' ? 'Amount for each person' : 'Percentage for each person',
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+                            ),
+                            const SizedBox(height: 8),
+                            ...selectedParticipants.map((participantId) {
+                              final person = controller.personById(participantId);
+                              final label = selectedSplitMethod == 'amount' ? '\$' : '%';
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: TextField(
+                                  controller: splitControllers[participantId],
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  decoration: InputDecoration(
+                                    labelText: '${person?.name ?? participantId} $label',
+                                    isDense: true,
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ],
+                        ),
                       ),
                     if (!isPersonal) const SizedBox(height: 12),
                     TextField(
@@ -1969,19 +2085,64 @@ Future<void> showAddExpenseSheet(
                           return;
                         }
 
+                        if (!isPersonal && selectedParticipants.isEmpty) {
+                          ScaffoldMessenger.of(sheetContext).showSnackBar(
+                            const SnackBar(content: Text('Please select at least one participant')),
+                          );
+                          return;
+                        }
+
+                        final participantsList = isPersonal ? [controller.state.me] : selectedParticipants.toList();
+
+                        // Validate split inputs
+                        Map<String, double>? splits;
+                        if (!isPersonal && selectedSplitMethod != 'equal') {
+                          splits = {};
+                          double totalValue = 0;
+                          for (final participantId in participantsList) {
+                            final value = double.tryParse(splitControllers[participantId]?.text.trim() ?? '');
+                            if (value == null || value < 0) {
+                              ScaffoldMessenger.of(sheetContext).showSnackBar(
+                                const SnackBar(content: Text('Please enter valid split values')),
+                              );
+                              return;
+                            }
+                            splits![participantId] = value;
+                            totalValue += value;
+                          }
+
+                          // Validate totals
+                          if (selectedSplitMethod == 'amount') {
+                            if ((totalValue - amount).abs() > 0.01) {
+                              ScaffoldMessenger.of(sheetContext).showSnackBar(
+                                SnackBar(content: Text('Split amounts must total \$$amount')),
+                              );
+                              return;
+                            }
+                          } else if (selectedSplitMethod == 'percentage') {
+                            if ((totalValue - 100).abs() > 0.01) {
+                              ScaffoldMessenger.of(sheetContext).showSnackBar(
+                                const SnackBar(content: Text('Percentages must total 100%')),
+                              );
+                              return;
+                            }
+                            // Convert percentages to amounts
+                            splits = splits.map((key, value) => MapEntry(key, (value / 100) * amount));
+                          }
+                        }
+
                         final groupToUse = isPersonal ? null : selectedGroupId;
-                        final participants = isPersonal
-                            ? [controller.state.me]
-                            : (groupToUse == null ? [controller.state.me] : (controller.groupById(groupToUse)?.members ?? [controller.state.me]));
 
                         controller.addExpense(
                           title: title,
                           amount: amount,
                           paidBy: isPersonal ? controller.state.me : selectedPayerId,
-                          participants: participants,
+                          participants: participantsList,
                           category: selectedCategory,
                           groupId: groupToUse,
                           note: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+                          splitMethod: selectedSplitMethod,
+                          splits: splits ?? {},
                           personal: isPersonal,
                         );
                         Navigator.of(sheetContext).pop();
