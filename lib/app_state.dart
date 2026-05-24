@@ -1,8 +1,61 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'services/local_state_store.dart';
+import 'services/backend_client.dart';
+
+class DemoAccount {
+  const DemoAccount({
+    required this.id,
+    required this.displayName,
+    required this.email,
+    required this.password,
+    required this.avatar,
+    required this.color,
+  });
+
+  final String id;
+  final String displayName;
+  final String email;
+  final String password;
+  final String avatar;
+  final String color;
+}
+
+const List<DemoAccount> demoAccounts = [
+  DemoAccount(
+    id: 'user-you',
+    displayName: 'You',
+    email: 'you@clearsplit.app',
+    password: 'demo123',
+    avatar: '🙂',
+    color: '#2563EB',
+  ),
+  DemoAccount(
+    id: 'user-alex',
+    displayName: 'Alex',
+    email: 'alex@clearsplit.app',
+    password: 'demo123',
+    avatar: '🧑',
+    color: '#10B981',
+  ),
+  DemoAccount(
+    id: 'user-maya',
+    displayName: 'Maya',
+    email: 'maya@clearsplit.app',
+    password: 'demo123',
+    avatar: '👩',
+    color: '#8B5CF6',
+  ),
+  DemoAccount(
+    id: 'user-jordan',
+    displayName: 'Jordan',
+    email: 'jordan@clearsplit.app',
+    password: 'demo123',
+    avatar: '🧔',
+    color: '#EF4444',
+  ),
+];
 
 class Person {
   const Person({required this.id, required this.name, required this.avatar, required this.color});
@@ -219,30 +272,43 @@ class AppData {
     );
   }
 
-  factory AppData.seed() {
+  factory AppData.seedForAccount(DemoAccount account) {
     final now = DateTime.now();
+    final meId = account.id;
+    List<String> uniqueIds(List<String> values) {
+      final result = <String>[];
+      for (final value in values) {
+        if (!result.contains(value)) {
+          result.add(value);
+        }
+      }
+      return result;
+    }
+
+    final people = <Person>[
+      Person(id: meId, name: account.displayName, avatar: account.avatar, color: account.color),
+      const Person(id: 'alex', name: 'Alex', avatar: '🧑', color: '#10B981'),
+      const Person(id: 'maya', name: 'Maya', avatar: '👩', color: '#8B5CF6'),
+      const Person(id: 'jordan', name: 'Jordan', avatar: '🧔', color: '#EF4444'),
+      const Person(id: 'chloe', name: 'Chloe', avatar: '👱‍♀️', color: '#F59E0B'),
+      const Person(id: 'sam', name: 'Sam', avatar: '👨', color: '#0EA5E9'),
+    ]..removeWhere((person) => person.id == meId && person.name != account.displayName);
+
     return AppData(
-      me: 'me',
-      people: const [
-        Person(id: 'me', name: 'You', avatar: '🙂', color: '#2563EB'),
-        Person(id: 'alex', name: 'Alex', avatar: '🧑', color: '#10B981'),
-        Person(id: 'maya', name: 'Maya', avatar: '👩', color: '#8B5CF6'),
-        Person(id: 'jordan', name: 'Jordan', avatar: '🧔', color: '#EF4444'),
-        Person(id: 'chloe', name: 'Chloe', avatar: '👱‍♀️', color: '#F59E0B'),
-        Person(id: 'sam', name: 'Sam', avatar: '👨', color: '#0EA5E9'),
-      ],
-      groups: const [
-        Group(id: 'beach', name: 'The Beach House', emoji: '🏖️', members: ['me', 'alex', 'maya', 'chloe']),
-        Group(id: 'apt', name: 'The Apartment Crew', emoji: '🏠', members: ['me', 'alex', 'jordan', 'sam']),
-        Group(id: 'trip', name: 'Road Trip 2026', emoji: '🚗', members: ['me', 'maya', 'sam']),
+      me: meId,
+      people: people,
+      groups: [
+        Group(id: 'beach', name: 'The Beach House', emoji: '🏖️', members: uniqueIds([meId, 'alex', 'maya', 'chloe'])),
+        Group(id: 'apt', name: 'The Apartment Crew', emoji: '🏠', members: uniqueIds([meId, 'alex', 'jordan', 'sam'])),
+        Group(id: 'trip', name: 'Road Trip 2026', emoji: '🚗', members: uniqueIds([meId, 'maya', 'sam'])),
       ],
       expenses: [
         Expense(
           id: 'e1',
           title: 'Five Guys Dinner',
           amount: 62.5,
-          paidBy: 'me',
-          participants: const ['me', 'alex', 'maya', 'jordan', 'sam'],
+          paidBy: meId,
+          participants: uniqueIds([meId, 'alex', 'maya', 'jordan', 'sam']),
           groupId: 'apt',
           category: '🍔',
           date: now.subtract(const Duration(hours: 1)),
@@ -252,7 +318,7 @@ class AppData {
           title: 'Grocery Run',
           amount: 90,
           paidBy: 'alex',
-          participants: const ['me', 'alex'],
+          participants: uniqueIds([meId, 'alex']),
           groupId: 'apt',
           category: '🛒',
           date: now.subtract(const Duration(hours: 26)),
@@ -261,8 +327,8 @@ class AppData {
           id: 'e3',
           title: 'Utilities - Oct',
           amount: 240,
-          paidBy: 'me',
-          participants: const ['me', 'alex', 'jordan', 'sam'],
+          paidBy: meId,
+          participants: uniqueIds([meId, 'alex', 'jordan', 'sam']),
           groupId: 'apt',
           category: '⚡',
           date: now.subtract(const Duration(days: 2)),
@@ -271,8 +337,8 @@ class AppData {
           id: 'e4',
           title: 'Cinema Tickets',
           amount: 48,
-          paidBy: 'me',
-          participants: const ['me', 'maya'],
+          paidBy: meId,
+          participants: uniqueIds([meId, 'maya']),
           groupId: 'trip',
           category: '🎬',
           date: now.subtract(const Duration(days: 5)),
@@ -282,7 +348,7 @@ class AppData {
           title: 'Beach BBQ',
           amount: 120,
           paidBy: 'chloe',
-          participants: const ['me', 'alex', 'maya', 'chloe'],
+          participants: uniqueIds([meId, 'alex', 'maya', 'chloe']),
           groupId: 'beach',
           category: '🔥',
           date: now.subtract(const Duration(days: 9)),
@@ -292,8 +358,8 @@ class AppData {
           id: 'p1',
           title: 'Morning Coffee',
           amount: 4.75,
-          paidBy: 'me',
-          participants: const ['me'],
+          paidBy: meId,
+          participants: uniqueIds([meId]),
           category: '☕',
           date: now.subtract(const Duration(hours: 2)),
           personal: true,
@@ -303,8 +369,8 @@ class AppData {
           id: 'p2',
           title: 'Metro Card',
           amount: 30,
-          paidBy: 'me',
-          participants: const ['me'],
+          paidBy: meId,
+          participants: uniqueIds([meId]),
           category: '🚇',
           date: now.subtract(const Duration(days: 1)),
           personal: true,
@@ -314,8 +380,8 @@ class AppData {
           id: 'p3',
           title: 'Spotify',
           amount: 10.99,
-          paidBy: 'me',
-          participants: const ['me'],
+          paidBy: meId,
+          participants: uniqueIds([meId]),
           category: '🎧',
           date: now.subtract(const Duration(days: 3)),
           personal: true,
@@ -325,15 +391,15 @@ class AppData {
           id: 'p4',
           title: 'Gym Membership',
           amount: 45,
-          paidBy: 'me',
-          participants: const ['me'],
+          paidBy: meId,
+          participants: uniqueIds([meId]),
           category: '💪',
           date: now.subtract(const Duration(days: 6)),
           personal: true,
           note: 'Health',
         ),
       ],
-      grocery: const [
+      grocery: [
         GroceryItem(id: 'g1', groupId: 'apt', name: 'Almond Milk', tag: 'DAIRY FREE', qty: '2 cartons', claimedBy: 'alex'),
         GroceryItem(id: 'g2', groupId: 'apt', name: 'Avocados', tag: 'PRODUCE', qty: 'Pack of 4'),
         GroceryItem(id: 'g3', groupId: 'apt', name: 'Fresh Pasta', boughtBy: 'alex', price: 12.5, done: true),
@@ -355,45 +421,72 @@ class BalanceSummary {
 }
 
 class AppController extends ChangeNotifier {
-  AppController() : _store = LocalStateStore() {
-    initialized = _loadInstance();
-  }
+  AppController({BackendClient? backendClient}) : _backendClient = backendClient ?? BackendClient();
 
-  final LocalStateStore _store;
-  AppData _state = AppData.seed();
-  bool _loaded = false;
-  late final Future<void> initialized;
+  final BackendClient _backendClient;
+  DemoAccount? _activeAccount;
+  AppData _state = AppData.seedForAccount(demoAccounts.first);
 
   AppData get state => _state;
 
-  Future<void> _loadInstance() async {
-    final raw = await _store.readState();
-    if (raw != null) {
-      try {
-        _state = AppData.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-      } catch (_) {
-        _state = AppData.seed();
+  bool get isSignedIn => _activeAccount != null;
+
+  DemoAccount? get activeAccount => _activeAccount;
+
+  List<DemoAccount> get availableAccounts => demoAccounts;
+
+  DemoAccount? accountByEmail(String email) {
+    for (final account in demoAccounts) {
+      if (account.email.toLowerCase() == email.toLowerCase()) {
+        return account;
       }
     }
-    _loaded = true;
+    return null;
+  }
+
+  Future<String?> signIn({required String email, required String password}) async {
+    try {
+      final session = await _backendClient.signIn(email: email.trim(), password: password);
+      _activeAccount = session.account;
+      _state = session.state;
+      notifyListeners();
+      return null;
+    } on BackendAuthException catch (error) {
+      return error.message;
+    } on BackendClientException catch (error) {
+      return error.message;
+    } catch (_) {
+      return 'Unable to connect to the backend.';
+    }
+  }
+
+  Future<void> signOut() async {
+    if (_activeAccount != null) {
+      unawaited(_backendClient.saveState(userId: _activeAccount!.id, state: _state));
+    }
+    _activeAccount = null;
+    _state = AppData.seedForAccount(demoAccounts.first);
     notifyListeners();
   }
 
-  Future<void> initializedOrThrow() async {
-    await _loadInstance();
-  }
-
-  Future<void> _save() async {
-    if (!_loaded) {
+  Future<void> resetCurrentAccount() async {
+    if (_activeAccount == null) {
+      _state = AppData.seedForAccount(demoAccounts.first);
+      notifyListeners();
       return;
     }
-    await _store.writeState(jsonEncode(_state.toJson()));
+
+    _state = AppData.seedForAccount(_activeAccount!);
+    notifyListeners();
+    unawaited(_backendClient.saveState(userId: _activeAccount!.id, state: _state));
   }
 
   void _update(AppData next) {
     _state = next;
     notifyListeners();
-    unawaited(_save());
+    if (_activeAccount != null) {
+      unawaited(_backendClient.saveState(userId: _activeAccount!.id, state: next));
+    }
   }
 
   Person? personById(String id) {
@@ -560,7 +653,7 @@ class AppController extends ChangeNotifier {
     _update(_state.copyWith(expenses: nextExpenses));
   }
 
-  void reset() => _update(AppData.seed());
+  Future<void> reset() => resetCurrentAccount();
 }
 
 String money(double value) => '\$${value.toStringAsFixed(2)}';
@@ -587,4 +680,3 @@ String timeAgo(DateTime when) {
   return '${when.month}/${when.day}';
 }
 
-void unawaited(Future<void> future) {}

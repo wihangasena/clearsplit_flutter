@@ -524,6 +524,13 @@ class ProfileScreen extends StatelessWidget {
           _ProfileHero(person: me, summary: balances),
           const SizedBox(height: 16),
           _SettingsCard(
+            title: 'Local-only demo',
+            subtitle: 'No backend sync, no account sign-in, and no remote storage.',
+            icon: Icons.devices_rounded,
+            onTap: () => _toast(context, 'This build runs entirely on the device.'),
+          ),
+          const SizedBox(height: 10),
+          _SettingsCard(
             title: 'Payment Methods',
             subtitle: 'Bank card ending in 4821',
             icon: Icons.credit_card_rounded,
@@ -552,8 +559,8 @@ class ProfileScreen extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           FilledButton.tonalIcon(
-            onPressed: () {
-              controller.reset();
+            onPressed: () async {
+              await controller.resetCurrentAccount();
               _toast(context, 'Demo data restored.');
             },
             style: FilledButton.styleFrom(
@@ -562,6 +569,18 @@ class ProfileScreen extends StatelessWidget {
             ),
             icon: const Icon(Icons.refresh_rounded),
             label: const Text('Reset Demo Data'),
+          ),
+          const SizedBox(height: 10),
+          FilledButton.tonalIcon(
+            onPressed: () async {
+              await controller.signOut();
+            },
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(54),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            ),
+            icon: const Icon(Icons.logout_rounded),
+            label: const Text('Sign Out'),
           ),
         ],
       ),

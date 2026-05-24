@@ -1,0 +1,294 @@
+{
+  "user-you": {
+    "me": "user-you",
+    "people": [
+      {
+        "id": "user-you",
+        "name": "You",
+        "avatar": "🙂",
+        "color": "#2563EB"
+      },
+      {
+        "id": "alex",
+        "name": "Alex",
+        "avatar": "🧑",
+        "color": "#10B981"
+      },
+      {
+        "id": "maya",
+        "name": "Maya",
+        "avatar": "👩",
+        "color": "#8B5CF6"
+      },
+      {
+        "id": "jordan",
+        "name": "Jordan",
+        "avatar": "🧔",
+        "color": "#EF4444"
+      },
+      {
+        "id": "chloe",
+        "name": "Chloe",
+        "avatar": "👱‍♀️",
+        "color": "#F59E0B"
+      },
+      {
+        "id": "sam",
+        "name": "Sam",
+        "avatar": "👨",
+        "color": "#0EA5E9"
+      }
+    ],
+    "groups": [
+      {
+        "id": "beach",
+        "name": "The Beach House",
+        "emoji": "🏖️",
+        "members": [
+          "user-you",
+          "alex",
+          "maya",
+          "chloe"
+        ]
+      },
+      {
+        "id": "apt",
+        "name": "The Apartment Crew",
+        "emoji": "🏠",
+        "members": [
+          "user-you",
+          "alex",
+          "jordan",
+          "sam"
+        ]
+      },
+      {
+        "id": "trip",
+        "name": "Road Trip 2026",
+        "emoji": "🚗",
+        "members": [
+          "user-you",
+          "maya",
+          "sam"
+        ]
+      }
+    ],
+    "expenses": [
+      {
+        "id": "e1",
+        "title": "Five Guys Dinner",
+        "amount": 62.5,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "alex",
+          "maya",
+          "jordan",
+          "sam"
+        ],
+        "groupId": "apt",
+        "category": "🍔",
+        "date": 1779604400984,
+        "note": null,
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e2",
+        "title": "Grocery Run",
+        "amount": 90,
+        "paidBy": "alex",
+        "participants": [
+          "user-you",
+          "alex"
+        ],
+        "groupId": "apt",
+        "category": "🛒",
+        "date": 1779514400984,
+        "note": null,
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e3",
+        "title": "Utilities - Oct",
+        "amount": 240,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "alex",
+          "jordan",
+          "sam"
+        ],
+        "groupId": "apt",
+        "category": "⚡",
+        "date": 1779435200984,
+        "note": null,
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e4",
+        "title": "Cinema Tickets",
+        "amount": 48,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "maya"
+        ],
+        "groupId": "trip",
+        "category": "🎬",
+        "date": 1779176000984,
+        "note": null,
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e5",
+        "title": "Beach BBQ",
+        "amount": 120,
+        "paidBy": "chloe",
+        "participants": [
+          "user-you",
+          "alex",
+          "maya",
+          "chloe"
+        ],
+        "groupId": "beach",
+        "category": "🔥",
+        "date": 1778830400984,
+        "note": null,
+        "settled": true,
+        "personal": false
+      },
+      {
+        "id": "p1",
+        "title": "Morning Coffee",
+        "amount": 4.75,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you"
+        ],
+        "groupId": null,
+        "category": "☕",
+        "date": 1779600800984,
+        "note": "Food",
+        "settled": false,
+        "personal": true
+      },
+      {
+        "id": "p2",
+        "title": "Metro Card",
+        "amount": 30,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you"
+        ],
+        "groupId": null,
+        "category": "🚇",
+        "date": 1779521600984,
+        "note": "Transport",
+        "settled": false,
+        "personal": true
+      },
+      {
+        "id": "p3",
+        "title": "Spotify",
+        "amount": 10.99,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you"
+        ],
+        "groupId": null,
+        "category": "🎧",
+        "date": 1779348800984,
+        "note": "Bills",
+        "settled": false,
+        "personal": true
+      },
+      {
+        "id": "p4",
+        "title": "Gym Membership",
+        "amount": 45,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you"
+        ],
+        "groupId": null,
+        "category": "💪",
+        "date": 1779089600984,
+        "note": "Health",
+        "settled": false,
+        "personal": true
+      }
+    ],
+    "grocery": [
+      {
+        "id": "g1",
+        "groupId": "apt",
+        "name": "Almond Milk",
+        "tag": "DAIRY FREE",
+        "qty": "2 cartons",
+        "claimedBy": "alex",
+        "boughtBy": null,
+        "price": null,
+        "done": false
+      },
+      {
+        "id": "g2",
+        "groupId": "apt",
+        "name": "Avocados",
+        "tag": "PRODUCE",
+        "qty": "Pack of 4",
+        "claimedBy": null,
+        "boughtBy": null,
+        "price": null,
+        "done": false
+      },
+      {
+        "id": "g3",
+        "groupId": "apt",
+        "name": "Fresh Pasta",
+        "tag": null,
+        "qty": null,
+        "claimedBy": null,
+        "boughtBy": "alex",
+        "price": 12.5,
+        "done": true
+      },
+      {
+        "id": "g4",
+        "groupId": "apt",
+        "name": "Greek Yogurt",
+        "tag": null,
+        "qty": null,
+        "claimedBy": null,
+        "boughtBy": null,
+        "price": null,
+        "done": false
+      },
+      {
+        "id": "g5",
+        "groupId": "apt",
+        "name": "Eggs",
+        "tag": null,
+        "qty": "Dozen",
+        "claimedBy": null,
+        "boughtBy": null,
+        "price": null,
+        "done": false
+      },
+      {
+        "id": "g6",
+        "groupId": "apt",
+        "name": "Bread",
+        "tag": "BAKERY",
+        "qty": null,
+        "claimedBy": null,
+        "boughtBy": null,
+        "price": null,
+        "done": false
+      }
+    ]
+  }
+}
