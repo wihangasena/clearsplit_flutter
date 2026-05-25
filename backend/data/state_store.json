@@ -382,6 +382,8 @@
         "category": "🍔",
         "date": 1779600685273,
         "note": null,
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": false
       },
@@ -398,6 +400,8 @@
         "category": "🛒",
         "date": 1779510685273,
         "note": null,
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": false
       },
@@ -416,6 +420,8 @@
         "category": "⚡",
         "date": 1779431485273,
         "note": null,
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": false
       },
@@ -432,6 +438,8 @@
         "category": "🎬",
         "date": 1779172285273,
         "note": null,
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": false
       },
@@ -450,6 +458,8 @@
         "category": "🔥",
         "date": 1778826685273,
         "note": null,
+        "splitMethod": "equal",
+        "splits": {},
         "settled": true,
         "personal": false
       },
@@ -465,6 +475,8 @@
         "category": "☕",
         "date": 1779597085273,
         "note": "Food",
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": true
       },
@@ -480,6 +492,8 @@
         "category": "🚇",
         "date": 1779517885273,
         "note": "Transport",
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": true
       },
@@ -495,6 +509,8 @@
         "category": "🎧",
         "date": 1779345085273,
         "note": "Bills",
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": true
       },
@@ -510,6 +526,8 @@
         "category": "💪",
         "date": 1779085885273,
         "note": "Health",
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": true
       }
