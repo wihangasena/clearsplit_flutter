@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_state.dart';
+import 'screens/edit_profile_screen.dart';
 
 class AppBootstrap extends StatelessWidget {
   const AppBootstrap({super.key, required this.controller});
@@ -521,15 +522,18 @@ class ProfileScreen extends StatelessWidget {
             subtitle: 'Your preferences and payment settings',
           ),
           const SizedBox(height: 18),
-          _ProfileHero(person: me, summary: balances),
-          const SizedBox(height: 16),
-          _SettingsCard(
-            title: 'Local-only demo',
-            subtitle: 'No backend sync, no account sign-in, and no remote storage.',
-            icon: Icons.devices_rounded,
-            onTap: () => _toast(context, 'This build runs entirely on the device.'),
+          _ProfileHero(
+            person: me,
+            summary: balances,
+            onEdit: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => EditProfileScreen(controller: controller),
+                ),
+              );
+            },
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 16),
           _SettingsCard(
             title: 'Payment Methods',
             subtitle: 'Bank card ending in 4821',
@@ -887,14 +891,16 @@ class ScanScreen extends StatelessWidget {
 }
 
 class _ProfileHero extends StatelessWidget {
-  const _ProfileHero({required this.person, required this.summary});
+  const _ProfileHero({required this.person, required this.summary, required this.onEdit});
 
   final Person person;
   final BalanceSummary summary;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
     return _SurfaceCard(
+      onTap: onEdit,
       padding: const EdgeInsets.all(18),
       child: Row(
         children: [
@@ -1991,7 +1997,7 @@ Future<void> showAddExpenseSheet(
                                   });
                                 },
                               );
-                            }).toList(),
+                            }),
                           ],
                         ),
                       ),
@@ -2050,7 +2056,7 @@ Future<void> showAddExpenseSheet(
                                   ),
                                 ),
                               );
-                            }).toList(),
+                            }),
                           ],
                         ),
                       ),
@@ -2107,7 +2113,7 @@ Future<void> showAddExpenseSheet(
                               );
                               return;
                             }
-                            splits![participantId] = value;
+                            splits[participantId] = value;
                             totalValue += value;
                           }
 

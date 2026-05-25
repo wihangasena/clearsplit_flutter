@@ -83,7 +83,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   children: [
                     for (final hex in ['#2563EB', '#10B981', '#8B5CF6', '#EF4444', '#F59E0B', '#0EA5E9'])
                       ChoiceChip(
-                        label: Container(width: 24, height: 24, decoration: BoxDecoration(color: Color(int.parse('0xff' + hex.substring(1))), shape: BoxShape.circle)),
+                        label: Container(width: 24, height: 24, decoration: BoxDecoration(color: Color(int.parse('0xff${hex.substring(1)}')), shape: BoxShape.circle)),
                         selected: _color == hex,
                         onSelected: (_) => setState(() => _color = hex),
                       ),
