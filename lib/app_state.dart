@@ -677,6 +677,45 @@ class AppController extends ChangeNotifier {
   }
 
   Future<void> reset() => resetCurrentAccount();
+
+  /// Update the current user's profile (display name, avatar emoji, color).
+  /// Returns null on success or an error message on failure.
+  Future<String?> updateProfile({required String displayName, required String avatar, required String color}) async {
+    if (_activeAccount == null) {
+      return 'Not signed in.';
+    }
+
+    try {
+      final meId = _state.me;
+      final nextPeople = _state.people.map((p) {
+        if (p.id == meId) {
+          return Person(id: p.id, name: displayName, avatar: avatar, color: color);
+        }
+        return p;
+      }).toList();
+
+      // Update active account representation
+      _activeAccount = DemoAccount(
+        id: _activeAccount!.id,
+        displayName: displayName,
+        email: _activeAccount!.email,
+        password: _activeAccount!.password,
+        avatar: avatar,
+        color: color,
+      );
+
+      final next = _state.copyWith(people: nextPeople);
+      _update(next);
+
+      // Persist to backend asynchronously
+      await _backendClient.saveState(userId: _activeAccount!.id, state: _state);
+      return null;
+    } on BackendClientException catch (e) {
+      return e.message;
+    } catch (_) {
+      return 'Unable to update profile.';
+    }
+  }
 }
 
 String money(double value) => '\$${value.toStringAsFixed(2)}';

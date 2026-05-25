@@ -590,7 +590,7 @@
         "id": "user-alex",
         "name": "Alex",
         "avatar": "🧑",
-        "color": "#10B981"
+        "color": "#8B5CF6"
       },
       {
         "id": "alex",
@@ -659,25 +659,6 @@
     ],
     "expenses": [
       {
-        "id": "e1779624460330000",
-        "title": "dinner",
-        "amount": 120,
-        "paidBy": "user-alex",
-        "participants": [
-          "user-alex",
-          "alex",
-          "maya"
-        ],
-        "groupId": "beach",
-        "category": "🍔",
-        "date": 1779624460330,
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": false
-      },
-      {
         "id": "e1",
         "title": "Five Guys Dinner",
         "amount": 62.5,
@@ -691,7 +672,7 @@
         ],
         "groupId": "apt",
         "category": "🍔",
-        "date": 1779620516586,
+        "date": 1779691969701,
         "note": null,
         "splitMethod": "equal",
         "splits": {},
@@ -709,7 +690,7 @@
         ],
         "groupId": "apt",
         "category": "🛒",
-        "date": 1779530516586,
+        "date": 1779601969701,
         "note": null,
         "splitMethod": "equal",
         "splits": {},
@@ -729,7 +710,7 @@
         ],
         "groupId": "apt",
         "category": "⚡",
-        "date": 1779451316586,
+        "date": 1779522769701,
         "note": null,
         "splitMethod": "equal",
         "splits": {},
@@ -747,7 +728,7 @@
         ],
         "groupId": "trip",
         "category": "🎬",
-        "date": 1779192116586,
+        "date": 1779263569701,
         "note": null,
         "splitMethod": "equal",
         "splits": {},
@@ -767,7 +748,7 @@
         ],
         "groupId": "beach",
         "category": "🔥",
-        "date": 1778846516586,
+        "date": 1778917969701,
         "note": null,
         "splitMethod": "equal",
         "splits": {},
@@ -784,7 +765,7 @@
         ],
         "groupId": null,
         "category": "☕",
-        "date": 1779616916586,
+        "date": 1779688369701,
         "note": "Food",
         "splitMethod": "equal",
         "splits": {},
@@ -801,7 +782,7 @@
         ],
         "groupId": null,
         "category": "🚇",
-        "date": 1779537716586,
+        "date": 1779609169701,
         "note": "Transport",
         "splitMethod": "equal",
         "splits": {},
@@ -818,7 +799,7 @@
         ],
         "groupId": null,
         "category": "🎧",
-        "date": 1779364916586,
+        "date": 1779436369701,
         "note": "Bills",
         "splitMethod": "equal",
         "splits": {},
@@ -835,10 +816,302 @@
         ],
         "groupId": null,
         "category": "💪",
-        "date": 1779105716586,
+        "date": 1779177169701,
         "note": "Health",
         "splitMethod": "equal",
         "splits": {},
+        "settled": false,
+        "personal": true
+      }
+    ],
+    "grocery": [
+      {
+        "id": "g1",
+        "groupId": "apt",
+        "name": "Almond Milk",
+        "tag": "DAIRY FREE",
+        "qty": "2 cartons",
+        "claimedBy": "alex",
+        "boughtBy": null,
+        "price": null,
+        "done": false
+      },
+      {
+        "id": "g2",
+        "groupId": "apt",
+        "name": "Avocados",
+        "tag": "PRODUCE",
+        "qty": "Pack of 4",
+        "claimedBy": null,
+        "boughtBy": null,
+        "price": null,
+        "done": false
+      },
+      {
+        "id": "g3",
+        "groupId": "apt",
+        "name": "Fresh Pasta",
+        "tag": null,
+        "qty": null,
+        "claimedBy": null,
+        "boughtBy": "alex",
+        "price": 12.5,
+        "done": true
+      },
+      {
+        "id": "g4",
+        "groupId": "apt",
+        "name": "Greek Yogurt",
+        "tag": null,
+        "qty": null,
+        "claimedBy": null,
+        "boughtBy": null,
+        "price": null,
+        "done": false
+      },
+      {
+        "id": "g5",
+        "groupId": "apt",
+        "name": "Eggs",
+        "tag": null,
+        "qty": "Dozen",
+        "claimedBy": null,
+        "boughtBy": null,
+        "price": null,
+        "done": false
+      },
+      {
+        "id": "g6",
+        "groupId": "apt",
+        "name": "Bread",
+        "tag": "BAKERY",
+        "qty": null,
+        "claimedBy": null,
+        "boughtBy": null,
+        "price": null,
+        "done": false
+      }
+    ]
+  },
+  "user-maya": {
+    "me": "user-maya",
+    "people": [
+      {
+        "id": "user-maya",
+        "name": "Maya",
+        "avatar": "👩",
+        "color": "#8B5CF6"
+      },
+      {
+        "id": "alex",
+        "name": "Alex",
+        "avatar": "🧑",
+        "color": "#10B981"
+      },
+      {
+        "id": "maya",
+        "name": "Maya",
+        "avatar": "👩",
+        "color": "#8B5CF6"
+      },
+      {
+        "id": "jordan",
+        "name": "Jordan",
+        "avatar": "🧔",
+        "color": "#EF4444"
+      },
+      {
+        "id": "chloe",
+        "name": "Chloe",
+        "avatar": "👱‍♀️",
+        "color": "#F59E0B"
+      },
+      {
+        "id": "sam",
+        "name": "Sam",
+        "avatar": "👨",
+        "color": "#0EA5E9"
+      }
+    ],
+    "groups": [
+      {
+        "id": "beach",
+        "name": "The Beach House",
+        "emoji": "🏖️",
+        "members": [
+          "user-maya",
+          "alex",
+          "maya",
+          "chloe"
+        ]
+      },
+      {
+        "id": "apt",
+        "name": "The Apartment Crew",
+        "emoji": "🏠",
+        "members": [
+          "user-maya",
+          "alex",
+          "jordan",
+          "sam"
+        ]
+      },
+      {
+        "id": "trip",
+        "name": "Road Trip 2026",
+        "emoji": "🚗",
+        "members": [
+          "user-maya",
+          "maya",
+          "sam"
+        ]
+      }
+    ],
+    "expenses": [
+      {
+        "id": "e1",
+        "title": "Five Guys Dinner",
+        "amount": 62.5,
+        "paidBy": "user-maya",
+        "participants": [
+          "user-maya",
+          "alex",
+          "maya",
+          "jordan",
+          "sam"
+        ],
+        "groupId": "apt",
+        "category": "🍔",
+        "date": 1779697720880,
+        "note": null,
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e2",
+        "title": "Grocery Run",
+        "amount": 90,
+        "paidBy": "alex",
+        "participants": [
+          "user-maya",
+          "alex"
+        ],
+        "groupId": "apt",
+        "category": "🛒",
+        "date": 1779607720880,
+        "note": null,
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e3",
+        "title": "Utilities - Oct",
+        "amount": 240,
+        "paidBy": "user-maya",
+        "participants": [
+          "user-maya",
+          "alex",
+          "jordan",
+          "sam"
+        ],
+        "groupId": "apt",
+        "category": "⚡",
+        "date": 1779528520880,
+        "note": null,
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e4",
+        "title": "Cinema Tickets",
+        "amount": 48,
+        "paidBy": "user-maya",
+        "participants": [
+          "user-maya",
+          "maya"
+        ],
+        "groupId": "trip",
+        "category": "🎬",
+        "date": 1779269320880,
+        "note": null,
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e5",
+        "title": "Beach BBQ",
+        "amount": 120,
+        "paidBy": "chloe",
+        "participants": [
+          "user-maya",
+          "alex",
+          "maya",
+          "chloe"
+        ],
+        "groupId": "beach",
+        "category": "🔥",
+        "date": 1778923720880,
+        "note": null,
+        "settled": true,
+        "personal": false
+      },
+      {
+        "id": "p1",
+        "title": "Morning Coffee",
+        "amount": 4.75,
+        "paidBy": "user-maya",
+        "participants": [
+          "user-maya"
+        ],
+        "groupId": null,
+        "category": "☕",
+        "date": 1779694120880,
+        "note": "Food",
+        "settled": false,
+        "personal": true
+      },
+      {
+        "id": "p2",
+        "title": "Metro Card",
+        "amount": 30,
+        "paidBy": "user-maya",
+        "participants": [
+          "user-maya"
+        ],
+        "groupId": null,
+        "category": "🚇",
+        "date": 1779614920880,
+        "note": "Transport",
+        "settled": false,
+        "personal": true
+      },
+      {
+        "id": "p3",
+        "title": "Spotify",
+        "amount": 10.99,
+        "paidBy": "user-maya",
+        "participants": [
+          "user-maya"
+        ],
+        "groupId": null,
+        "category": "🎧",
+        "date": 1779442120880,
+        "note": "Bills",
+        "settled": false,
+        "personal": true
+      },
+      {
+        "id": "p4",
+        "title": "Gym Membership",
+        "amount": 45,
+        "paidBy": "user-maya",
+        "participants": [
+          "user-maya"
+        ],
+        "groupId": null,
+        "category": "💪",
+        "date": 1779182920880,
+        "note": "Health",
         "settled": false,
         "personal": true
       }
