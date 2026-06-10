@@ -1,6 +1,16 @@
 -- Supabase Schema for ClearSplit App
 -- Run these queries in Supabase SQL Editor
 
+-- App state table used by the Dart backend.
+-- This keeps the current Flutter data model fully synced with Supabase while
+-- the app still uses demo account ids like `user-you`.
+CREATE TABLE IF NOT EXISTS public.app_states (
+  user_id TEXT PRIMARY KEY,
+  state JSONB NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Create users table (extends auth.users)
 CREATE TABLE IF NOT EXISTS public.users (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -98,6 +108,7 @@ CREATE INDEX idx_expense_participants_person_id ON public.expense_participants(p
 CREATE INDEX idx_grocery_items_group_id ON public.grocery_items(group_id);
 
 -- Enable RLS (Row Level Security)
+ALTER TABLE public.app_states ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.people ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.groups ENABLE ROW LEVEL SECURITY;
@@ -107,6 +118,9 @@ ALTER TABLE public.expense_participants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.grocery_items ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for users
+CREATE POLICY "Backend can manage app states" ON public.app_states
+  FOR ALL USING (true) WITH CHECK (true);
+
 CREATE POLICY "Users can read their own data" ON public.users
   FOR SELECT USING (auth.uid() = id);
 
@@ -158,6 +172,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON public.users
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_app_states_updated_at BEFORE UPDATE ON public.app_states
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_people_updated_at BEFORE UPDATE ON public.people

@@ -244,9 +244,10 @@ Map<String, dynamic> _seedStateForAccount(DemoAccount account) {
 }
 
 class BackendStore {
-  BackendStore(this.file);
+  BackendStore(this.file, {this.remote});
 
   final File file;
+  final SupabaseStateSync? remote;
   Map<String, Map<String, dynamic>> _states = <String, Map<String, dynamic>>{};
   bool _loaded = false;
 
@@ -266,13 +267,22 @@ class BackendStore {
 
   Future<Map<String, dynamic>> stateForAccount(DemoAccount account) async {
     await _ensureLoaded();
+    final remoteState = await remote?.fetchState(account.id);
+    if (remoteState != null) {
+      _states[account.id] = remoteState;
+      await _persist();
+      return remoteState;
+    }
+
     final existing = _states[account.id];
     if (existing != null) {
+      await remote?.saveState(account.id, existing);
       return existing;
     }
     final seeded = _seedStateForAccount(account);
     _states[account.id] = seeded;
     await _persist();
+    await remote?.saveState(account.id, seeded);
     return seeded;
   }
 
@@ -286,6 +296,7 @@ class BackendStore {
     await _ensureLoaded();
     _states[userId] = state;
     await _persist();
+    await remote?.saveState(userId, state);
   }
 
   Future<Map<String, dynamic>> updateProfile(
@@ -316,6 +327,7 @@ class BackendStore {
     };
     _states[userId] = updated;
     await _persist();
+    await remote?.saveState(userId, updated);
     return updated;
   }
 
@@ -325,24 +337,51 @@ class BackendStore {
   }
 }
 
-class SupabaseProfileSync {
-  SupabaseProfileSync._({required this.url, required this.key});
+class SupabaseStateSync {
+  SupabaseStateSync._({required this.url, required this.key});
 
   final Uri url;
   final String key;
 
-  static SupabaseProfileSync? fromEnvironment() {
+  static SupabaseStateSync? fromEnvironment() {
     final env = _loadEnv();
-    final rawUrl = env['SUPABASE_URL'] ?? env['VITE_SUPABASE_URL'];
+    final rawUrl = _normalizeSupabaseUrl(env['SUPABASE_URL'] ?? env['VITE_SUPABASE_URL'], env['VITE_SUPABASE_PROJECT_ID']);
     final key = env['SUPABASE_SERVICE_ROLE_KEY'] ?? env['SUPABASE_ANON_KEY'] ?? env['VITE_SUPABASE_PUBLISHABLE_KEY'];
-    if (rawUrl == null || key == null || rawUrl.contains('/dashboard/')) {
+    if (rawUrl == null || key == null) {
       return null;
     }
     final parsedUrl = Uri.tryParse(rawUrl);
     if (parsedUrl == null || !parsedUrl.hasScheme || parsedUrl.host.isEmpty) {
       return null;
     }
-    return SupabaseProfileSync._(url: parsedUrl, key: key);
+    return SupabaseStateSync._(url: parsedUrl, key: key);
+  }
+
+  Future<Map<String, dynamic>?> fetchState(String userId) async {
+    final rows = await _get(
+      'app_states',
+      query: {
+        'user_id': 'eq.$userId',
+        'select': 'state',
+        'limit': '1',
+      },
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return Map<String, dynamic>.from(rows.first['state'] as Map);
+  }
+
+  Future<void> saveState(String userId, Map<String, dynamic> state) async {
+    await _post(
+      'app_states',
+      query: {'on_conflict': 'user_id'},
+      body: {
+        'user_id': userId,
+        'state': state,
+      },
+      prefer: 'resolution=merge-duplicates,return=minimal',
+    );
   }
 
   Future<void> updateProfile({
@@ -372,19 +411,47 @@ class SupabaseProfileSync {
     );
   }
 
+  Future<List<Map<String, dynamic>>> _get(String table, {required Map<String, String> query}) async {
+    final endpoint = _endpoint(table, query);
+    final client = HttpClient();
+    try {
+      final request = await client.getUrl(endpoint);
+      _setHeaders(request.headers);
+      final response = await request.close();
+      final body = await utf8.decodeStream(response);
+      if (response.statusCode >= 400) {
+        throw StateError('Supabase read failed for $table (${response.statusCode}): $body');
+      }
+      final decoded = jsonDecode(body);
+      return (decoded as List<dynamic>).map((entry) => Map<String, dynamic>.from(entry as Map)).toList();
+    } finally {
+      client.close();
+    }
+  }
+
+  Future<void> _post(String table, {required Map<String, String> query, required Map<String, dynamic> body, required String prefer}) async {
+    final endpoint = _endpoint(table, query);
+    final client = HttpClient();
+    try {
+      final request = await client.postUrl(endpoint);
+      _setHeaders(request.headers, prefer: prefer);
+      request.write(jsonEncode(body));
+      final response = await request.close();
+      final responseBody = await utf8.decodeStream(response);
+      if (response.statusCode >= 400) {
+        throw StateError('Supabase save failed for $table (${response.statusCode}): $responseBody');
+      }
+    } finally {
+      client.close();
+    }
+  }
+
   Future<void> _patch(String table, {required Map<String, String> query, required Map<String, dynamic> body}) async {
-    final endpoint = url.replace(
-      path: '${url.path.replaceAll(RegExp(r'/$'), '')}/rest/v1/$table',
-      queryParameters: query,
-    );
+    final endpoint = _endpoint(table, query);
     final client = HttpClient();
     try {
       final request = await client.patchUrl(endpoint);
-      request.headers
-        ..set(HttpHeaders.authorizationHeader, 'Bearer $key')
-        ..set('apikey', key)
-        ..set(HttpHeaders.contentTypeHeader, 'application/json')
-        ..set('Prefer', 'return=minimal');
+      _setHeaders(request.headers);
       request.write(jsonEncode(body));
       final response = await request.close();
       if (response.statusCode >= 400) {
@@ -394,6 +461,33 @@ class SupabaseProfileSync {
       client.close();
     }
   }
+
+  Uri _endpoint(String table, Map<String, String> query) {
+    return url.replace(
+      path: '${url.path.replaceAll(RegExp(r'/$'), '')}/rest/v1/$table',
+      queryParameters: query,
+    );
+  }
+
+  void _setHeaders(HttpHeaders headers, {String prefer = 'return=minimal'}) {
+    headers
+      ..set(HttpHeaders.authorizationHeader, 'Bearer $key')
+      ..set('apikey', key)
+      ..set(HttpHeaders.contentTypeHeader, 'application/json')
+      ..set('Prefer', prefer);
+  }
+}
+
+String? _normalizeSupabaseUrl(String? rawUrl, String? projectId) {
+  if (rawUrl == null || rawUrl.trim().isEmpty) {
+    return projectId == null ? null : 'https://$projectId.supabase.co';
+  }
+  final trimmed = rawUrl.trim();
+  if (trimmed.contains('/dashboard/project/')) {
+    final id = projectId ?? trimmed.split('/dashboard/project/').last.split('/').first;
+    return 'https://$id.supabase.co';
+  }
+  return trimmed;
 }
 
 Map<String, String> _loadEnv() {
@@ -442,8 +536,8 @@ Middleware _corsMiddleware() {
 }
 
 Future<void> runBackendServer({int port = 8081}) async {
-  final store = BackendStore(File('data/state_store.json'));
-  final supabase = SupabaseProfileSync.fromEnvironment();
+  final supabase = SupabaseStateSync.fromEnvironment();
+  final store = BackendStore(File('data/state_store.json'), remote: supabase);
   final router = Router()
     ..get('/health', (Request request) {
       return _jsonResponse({'status': 'ok'});
