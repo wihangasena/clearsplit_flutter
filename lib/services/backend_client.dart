@@ -77,6 +77,31 @@ class BackendClient {
     }
   }
 
+  Future<AppData> updateProfile({
+    required String userId,
+    required String displayName,
+    required String avatar,
+    required String color,
+  }) async {
+    final response = await http.patch(
+      _resolve('/profile/$userId'),
+      headers: const {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'displayName': displayName,
+        'avatar': avatar,
+        'color': color,
+      }),
+    );
+
+    final payload = _decodeBody(response.body);
+    if (response.statusCode >= 400) {
+      final message = (payload['message'] as String?) ?? 'Unable to update profile.';
+      throw BackendClientException(message);
+    }
+
+    return AppData.fromJson(Map<String, dynamic>.from(payload['state'] as Map));
+  }
+
   Map<String, dynamic> _decodeBody(String body) {
     if (body.isEmpty) {
       return const <String, dynamic>{};

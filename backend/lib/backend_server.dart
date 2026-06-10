@@ -288,10 +288,131 @@ class BackendStore {
     await _persist();
   }
 
+  Future<Map<String, dynamic>> updateProfile(
+    String userId, {
+    required String displayName,
+    required String avatar,
+    required String color,
+  }) async {
+    await _ensureLoaded();
+    final account = demoAccounts.firstWhere((entry) => entry.id == userId, orElse: () => throw StateError('Unknown user'));
+    final state = await stateForAccount(account);
+    final people = (state['people'] as List<dynamic>).map((entry) {
+      final person = Map<String, dynamic>.from(entry as Map);
+      if (person['id'] == state['me']) {
+        return {
+          ...person,
+          'name': displayName,
+          'avatar': avatar,
+          'color': color,
+        };
+      }
+      return person;
+    }).toList();
+
+    final updated = {
+      ...state,
+      'people': people,
+    };
+    _states[userId] = updated;
+    await _persist();
+    return updated;
+  }
+
   Future<void> _persist() async {
     await file.parent.create(recursive: true);
     await file.writeAsString(const JsonEncoder.withIndent('  ').convert(_states));
   }
+}
+
+class SupabaseProfileSync {
+  SupabaseProfileSync._({required this.url, required this.key});
+
+  final Uri url;
+  final String key;
+
+  static SupabaseProfileSync? fromEnvironment() {
+    final env = _loadEnv();
+    final rawUrl = env['SUPABASE_URL'] ?? env['VITE_SUPABASE_URL'];
+    final key = env['SUPABASE_SERVICE_ROLE_KEY'] ?? env['SUPABASE_ANON_KEY'] ?? env['VITE_SUPABASE_PUBLISHABLE_KEY'];
+    if (rawUrl == null || key == null || rawUrl.contains('/dashboard/')) {
+      return null;
+    }
+    final parsedUrl = Uri.tryParse(rawUrl);
+    if (parsedUrl == null || !parsedUrl.hasScheme || parsedUrl.host.isEmpty) {
+      return null;
+    }
+    return SupabaseProfileSync._(url: parsedUrl, key: key);
+  }
+
+  Future<void> updateProfile({
+    required String userId,
+    required String email,
+    required String displayName,
+    required String avatar,
+    required String color,
+  }) async {
+    await _patch(
+      'users',
+      query: {'email': 'eq.$email'},
+      body: {
+        'display_name': displayName,
+        'avatar': avatar,
+        'color': color,
+      },
+    );
+    await _patch(
+      'people',
+      query: {'user_id': 'eq.$userId'},
+      body: {
+        'name': displayName,
+        'avatar': avatar,
+        'color': color,
+      },
+    );
+  }
+
+  Future<void> _patch(String table, {required Map<String, String> query, required Map<String, dynamic> body}) async {
+    final endpoint = url.replace(
+      path: '${url.path.replaceAll(RegExp(r'/$'), '')}/rest/v1/$table',
+      queryParameters: query,
+    );
+    final client = HttpClient();
+    try {
+      final request = await client.patchUrl(endpoint);
+      request.headers
+        ..set(HttpHeaders.authorizationHeader, 'Bearer $key')
+        ..set('apikey', key)
+        ..set(HttpHeaders.contentTypeHeader, 'application/json')
+        ..set('Prefer', 'return=minimal');
+      request.write(jsonEncode(body));
+      final response = await request.close();
+      if (response.statusCode >= 400) {
+        throw StateError('Supabase profile sync failed for $table (${response.statusCode}).');
+      }
+    } finally {
+      client.close();
+    }
+  }
+}
+
+Map<String, String> _loadEnv() {
+  final values = <String, String>{...Platform.environment};
+  for (final path in ['.env', '../.env', '../.vscode/.env']) {
+    final file = File(path);
+    if (!file.existsSync()) {
+      continue;
+    }
+    for (final line in file.readAsLinesSync()) {
+      final trimmed = line.trim();
+      if (trimmed.isEmpty || trimmed.startsWith('#') || !trimmed.contains('=')) {
+        continue;
+      }
+      final index = trimmed.indexOf('=');
+      values.putIfAbsent(trimmed.substring(0, index), () => trimmed.substring(index + 1));
+    }
+  }
+  return values;
 }
 
 Response _jsonResponse(Map<String, dynamic> body, {int statusCode = 200}) {
@@ -322,6 +443,7 @@ Middleware _corsMiddleware() {
 
 Future<void> runBackendServer({int port = 8081}) async {
   final store = BackendStore(File('data/state_store.json'));
+  final supabase = SupabaseProfileSync.fromEnvironment();
   final router = Router()
     ..get('/health', (Request request) {
       return _jsonResponse({'status': 'ok'});
@@ -368,6 +490,40 @@ Future<void> runBackendServer({int port = 8081}) async {
         return _jsonResponse({'state': data});
       } catch (_) {
         return _jsonResponse({'message': 'Unable to save state.'}, statusCode: 500);
+      }
+    })
+    ..patch('/profile/<userId>', (Request request, String userId) async {
+      final decoded = jsonDecode(await request.readAsString());
+      if (decoded is! Map) {
+        return _jsonResponse({'message': 'Invalid profile payload.'}, statusCode: 400);
+      }
+      final data = Map<String, dynamic>.from(decoded);
+      final displayName = (data['displayName'] ?? '').toString().trim();
+      final avatar = (data['avatar'] ?? '').toString().trim();
+      final color = (data['color'] ?? '').toString().trim();
+      if (displayName.isEmpty || avatar.isEmpty || !RegExp(r'^#[0-9A-Fa-f]{6}$').hasMatch(color)) {
+        return _jsonResponse({'message': 'Invalid profile details.'}, statusCode: 400);
+      }
+
+      try {
+        final account = demoAccounts.firstWhere((entry) => entry.id == userId);
+        final state = await store.updateProfile(userId, displayName: displayName, avatar: avatar, color: color);
+        if (supabase != null) {
+          try {
+            await supabase.updateProfile(
+              userId: userId,
+              email: account.email,
+              displayName: displayName,
+              avatar: avatar,
+              color: color,
+            );
+          } catch (error) {
+            stderr.writeln(error);
+          }
+        }
+        return _jsonResponse({'state': state});
+      } catch (_) {
+        return _jsonResponse({'message': 'Unable to update profile.'}, statusCode: 500);
       }
     })
     ..post('/auth/logout', (Request request) {

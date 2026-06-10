@@ -42,12 +42,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       avatar: _avatarCtrl.text.trim(),
       color: _color,
     );
+    if (!mounted) return;
     setState(() => _saving = false);
     if (err != null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
       return;
     }
-    if (!mounted) return;
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Profile updated')));
   }

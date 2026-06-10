@@ -441,6 +441,10 @@ class AppController extends ChangeNotifier {
   AppController({BackendClient? backendClient}) : _backendClient = backendClient ?? BackendClient();
 
   final BackendClient _backendClient;
+  /// A Future that completes when the controller has finished any async
+  /// initialization. Currently initialization is synchronous, so this
+  /// returns a completed Future. Tests may await this getter.
+  Future<void> get initialized => Future<void>.value();
   DemoAccount? _activeAccount;
   AppData _state = AppData.seedForAccount(demoAccounts.first);
 
@@ -686,15 +690,13 @@ class AppController extends ChangeNotifier {
     }
 
     try {
-      final meId = _state.me;
-      final nextPeople = _state.people.map((p) {
-        if (p.id == meId) {
-          return Person(id: p.id, name: displayName, avatar: avatar, color: color);
-        }
-        return p;
-      }).toList();
+      final nextState = await _backendClient.updateProfile(
+        userId: _activeAccount!.id,
+        displayName: displayName,
+        avatar: avatar,
+        color: color,
+      );
 
-      // Update active account representation
       _activeAccount = DemoAccount(
         id: _activeAccount!.id,
         displayName: displayName,
@@ -703,12 +705,8 @@ class AppController extends ChangeNotifier {
         avatar: avatar,
         color: color,
       );
-
-      final next = _state.copyWith(people: nextPeople);
-      _update(next);
-
-      // Persist to backend asynchronously
-      await _backendClient.saveState(userId: _activeAccount!.id, state: _state);
+      _state = nextState;
+      notifyListeners();
       return null;
     } on BackendClientException catch (e) {
       return e.message;

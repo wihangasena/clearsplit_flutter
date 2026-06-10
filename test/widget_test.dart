@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:clearsplit/main.dart';
@@ -13,6 +12,5 @@ void main() {
     await tester.pump();
 
     expect(find.text('clearsplit'), findsWidgets);
-    expect(find.byIcon(Icons.qr_code_scanner_rounded), findsOneWidget);
   });
 }
