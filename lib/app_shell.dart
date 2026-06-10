@@ -426,26 +426,81 @@ class ActivityScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 18, 20, 120),
         children: [
-          const _PageHeader(
-            title: 'clearsplit',
-            subtitle: 'Live feed of splits and reminders',
+          _SurfaceCard(
+            padding: const EdgeInsets.all(18),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF102A43), Color(0xFF0F766E)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.14),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Icon(Icons.bolt_rounded, color: Colors.white),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Activity',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.92),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 1.4,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'Live feed and reminders',
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white, height: 1.05),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    'Track what changed, settle what is due, and keep the group moving.',
+                    style: TextStyle(color: Colors.white.withValues(alpha: 0.82), height: 1.35),
+                  ),
+                  const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: const [
+                      _MiniPill(label: 'Today'),
+                      _MiniPill(label: 'Settlements'),
+                      _MiniPill(label: 'Reminders'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
           const SizedBox(height: 18),
-          _GradientBalanceCard(summary: balances, trailingText: '+\$42.00 today'),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(child: _MetricCard(title: 'You owe', value: money(balances.owe), accent: const Color(0xFFDC2626))),
-              const SizedBox(width: 12),
-              Expanded(child: _MetricCard(title: 'You are owed', value: money(balances.owed), accent: const Color(0xFF0F766E))),
-            ],
-          ),
-          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Activity Feed',
+                'Feed',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
               ),
               TextButton(
@@ -462,10 +517,6 @@ class ActivityScreen extends StatelessWidget {
                   child: _ActivityCard(
                     controller: controller,
                     expense: expense,
-                    onSettle: () {
-                      controller.markSettled(expense.id);
-                      _toast(context, 'Marked as settled.');
-                    },
                     onPoke: (name) => _toast(context, 'Poked $name.'),
                   ),
                 )),
@@ -478,10 +529,6 @@ class ActivityScreen extends StatelessWidget {
                   child: _ActivityCard(
                     controller: controller,
                     expense: expense,
-                    onSettle: () {
-                      controller.markSettled(expense.id);
-                      _toast(context, 'Marked as settled.');
-                    },
                     onPoke: (name) => _toast(context, 'Poked $name.'),
                   ),
                 )),
@@ -730,17 +777,49 @@ class GroupDetailScreen extends StatelessWidget {
           const _SectionLabel(text: 'SHARED EXPENSES'),
           const SizedBox(height: 10),
           ...groupExpenses.map(
-            (expense) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _ExpenseTile(
-                title: expense.title,
-                subtitle: expense.personal ? 'Private expense' : 'Split with ${expense.participants.length} people',
-                leading: expense.category,
-                amount: expense.amount,
-                timestamp: timeAgo(expense.date),
-                positive: true,
-              ),
-            ),
+            (expense) {
+              final me = controller.state.me;
+              final youPaid = expense.paidBy == me;
+              final youAreIncluded = expense.participants.contains(me);
+              final youOwe = !expense.settled && !youPaid && youAreIncluded;
+              final share = youAreIncluded ? expense.getParticipantShare(me).toDouble() : 0.0;
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _ExpenseTile(
+                  title: expense.title,
+                  subtitle: expense.personal
+                      ? 'Private expense'
+                      : expense.settled
+                          ? 'Settled'
+                          : youPaid
+                              ? 'You paid - split ${expense.participants.length} people'
+                              : youOwe
+                                  ? 'You owe ${money(share)}'
+                                  : 'Split with ${expense.participants.length} people',
+                  leading: expense.category,
+                  amount: youOwe ? share : expense.amount,
+                  timestamp: timeAgo(expense.date),
+                  positive: youPaid,
+                  action: expense.settled
+                      ? const _StatusPill(label: 'Settled', color: Color(0xFF0F766E))
+                      : youOwe
+                          ? FilledButton.tonalIcon(
+                              onPressed: () {
+                                controller.markSettled(expense.id);
+                                _toast(context, 'Marked as settled.');
+                              },
+                              style: FilledButton.styleFrom(
+                                minimumSize: const Size(0, 36),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+                              ),
+                              icon: const Icon(Icons.payments_rounded, size: 16),
+                              label: const Text('Settle'),
+                            )
+                          : null,
+                ),
+              );
+            },
           ),
           const SizedBox(height: 16),
           const _SectionLabel(text: 'GROCERY LIST'),
@@ -1044,7 +1123,7 @@ class _GroupTile extends StatelessWidget {
 }
 
 class _ExpenseTile extends StatelessWidget {
-  const _ExpenseTile({required this.title, required this.subtitle, required this.leading, required this.amount, required this.timestamp, this.positive = false});
+  const _ExpenseTile({required this.title, required this.subtitle, required this.leading, required this.amount, required this.timestamp, this.positive = false, this.action});
 
   final String title;
   final String subtitle;
@@ -1052,6 +1131,7 @@ class _ExpenseTile extends StatelessWidget {
   final double amount;
   final String timestamp;
   final bool positive;
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
@@ -1088,6 +1168,10 @@ class _ExpenseTile extends StatelessWidget {
               Text('$sign${money(amount.abs())}', style: TextStyle(fontWeight: FontWeight.w900, color: color)),
               const SizedBox(height: 4),
               Text(timestamp, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+              if (action != null) ...[
+                const SizedBox(height: 8),
+                action!,
+              ],
             ],
           ),
         ],
@@ -1097,19 +1181,20 @@ class _ExpenseTile extends StatelessWidget {
 }
 
 class _ActivityCard extends StatelessWidget {
-  const _ActivityCard({required this.controller, required this.expense, required this.onSettle, required this.onPoke});
+  const _ActivityCard({required this.controller, required this.expense, required this.onPoke});
 
   final AppController controller;
   final Expense expense;
-  final VoidCallback onSettle;
   final void Function(String name) onPoke;
 
   @override
   Widget build(BuildContext context) {
     final payer = controller.personById(expense.paidBy);
     final me = controller.state.me;
-    final youOwe = expense.paidBy != me && expense.participants.contains(me);
-    final share = expense.amount / expense.participants.length;
+    final youPaid = expense.paidBy == me;
+    final youAreIncluded = expense.participants.contains(me);
+    final youOwe = !expense.settled && !youPaid && youAreIncluded;
+    final share = youAreIncluded ? expense.getParticipantShare(me).toDouble() : 0.0;
 
     return _SurfaceCard(
       padding: const EdgeInsets.all(14),
@@ -1162,35 +1247,22 @@ class _ActivityCard extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              if (expense.settled)
-                const _StatusPill(label: 'Settled', color: Color(0xFF0F766E))
-              else if (youOwe)
-                FilledButton.tonalIcon(
-                  onPressed: onSettle,
-                  style: FilledButton.styleFrom(
-                    minimumSize: const Size(0, 36),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-                  ),
-                  icon: const Icon(Icons.payments_rounded, size: 16),
-                  label: const Text('Settle'),
-                )
-              else
-                FilledButton(
-                  onPressed: () => onPoke(payer?.name ?? 'the group'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF0F766E),
-                    minimumSize: const Size(0, 36),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.notifications_active_rounded, size: 16),
-                      SizedBox(width: 6),
-                      Text('Poke'),
-                    ],
-                  ),
+              FilledButton(
+                onPressed: () => onPoke(payer?.name ?? 'the group'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: const Color(0xFF0F766E),
+                  minimumSize: const Size(0, 36),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
                 ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.notifications_active_rounded, size: 16),
+                    SizedBox(width: 6),
+                    Text('Poke'),
+                  ],
+                ),
+              ),
             ],
           ),
         ],

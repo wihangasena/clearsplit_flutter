@@ -5,8 +5,9 @@ import 'app_shell.dart';
 import 'app_state.dart';
 import 'screens/login_screen.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final controller = AppController();
   runApp(ClearSplitApp(controller: controller));
 }

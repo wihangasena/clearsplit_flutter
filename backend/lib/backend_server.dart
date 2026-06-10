@@ -629,6 +629,36 @@ Future<void> runBackendServer({int port = 8081}) async {
       .addMiddleware(_corsMiddleware())
       .addHandler(router.call);
 
-  final server = await shelf_io.serve(handler, '127.0.0.1', port);
-  print('ClearSplit backend listening on http://${server.address.host}:${server.port}');
+  if (await _isBackendHealthy(port)) {
+    print('ClearSplit backend is already running on http://127.0.0.1:$port');
+    return;
+  }
+
+  try {
+    final server = await shelf_io.serve(handler, '127.0.0.1', port);
+    print('ClearSplit backend listening on http://${server.address.host}:${server.port}');
+  } on SocketException catch (error) {
+    if (error.osError?.errorCode == 10048) {
+      if (await _isBackendHealthy(port)) {
+        print('ClearSplit backend is already running on http://127.0.0.1:$port');
+        return;
+      }
+      stderr.writeln('Port $port is already in use. Stop the process using it or start the backend on another port.');
+      return;
+    }
+    rethrow;
+  }
+}
+
+Future<bool> _isBackendHealthy(int port) async {
+  final client = HttpClient()..connectionTimeout = const Duration(milliseconds: 500);
+  try {
+    final request = await client.getUrl(Uri.parse('http://127.0.0.1:$port/health'));
+    final response = await request.close();
+    return response.statusCode == 200;
+  } catch (_) {
+    return false;
+  } finally {
+    client.close(force: true);
+  }
 }

@@ -35,10 +35,7 @@ class BackendClient {
     final response = await http.post(
       _resolve('/auth/login'),
       headers: const {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-      }),
+      body: jsonEncode({'email': email, 'password': password}),
     );
 
     final payload = _decodeBody(response.body);

@@ -75,6 +75,7 @@
     ],
     "expenses": [
       {
+<<<<<<< Updated upstream
         "id": "e1781102472148000",
         "title": "dinner",
         "amount": 500,
@@ -88,6 +89,22 @@
         "category": "🍔",
         "date": 1781102472148,
         "note": "It is yummy one",
+=======
+        "id": "e1781017041530000",
+        "title": "lunch trip",
+        "amount": 600,
+        "paidBy": "user-jordan",
+        "participants": [
+          "user-jordan",
+          "alex",
+          "jordan",
+          "sam"
+        ],
+        "groupId": "apt",
+        "category": "🍔",
+        "date": 1781017041530,
+        "note": null,
+>>>>>>> Stashed changes
         "splitMethod": "equal",
         "splits": {},
         "settled": false,
@@ -328,6 +345,7 @@
       }
     ]
   },
+<<<<<<< Updated upstream
   "user-you": {
     "me": "user-you",
     "people": [
@@ -336,6 +354,16 @@
         "name": "You",
         "avatar": "🙂",
         "color": "#2563EB"
+=======
+  "user-alex": {
+    "me": "user-alex",
+    "people": [
+      {
+        "id": "user-alex",
+        "name": "Alex",
+        "avatar": "🧑",
+        "color": "#10B981"
+>>>>>>> Stashed changes
       },
       {
         "id": "alex",
@@ -374,7 +402,11 @@
         "name": "The Beach House",
         "emoji": "🏖️",
         "members": [
+<<<<<<< Updated upstream
           "user-you",
+=======
+          "user-alex",
+>>>>>>> Stashed changes
           "alex",
           "maya",
           "chloe"
@@ -385,7 +417,11 @@
         "name": "The Apartment Crew",
         "emoji": "🏠",
         "members": [
+<<<<<<< Updated upstream
           "user-you",
+=======
+          "user-alex",
+>>>>>>> Stashed changes
           "alex",
           "jordan",
           "sam"
@@ -396,7 +432,11 @@
         "name": "Road Trip 2026",
         "emoji": "🚗",
         "members": [
+<<<<<<< Updated upstream
           "user-you",
+=======
+          "user-alex",
+>>>>>>> Stashed changes
           "maya",
           "sam"
         ]
@@ -404,6 +444,7 @@
     ],
     "expenses": [
       {
+<<<<<<< Updated upstream
         "id": "e1781103679835000",
         "title": "Bread",
         "amount": 250,
@@ -430,6 +471,14 @@
         "paidBy": "user-you",
         "participants": [
           "user-you",
+=======
+        "id": "e1",
+        "title": "Five Guys Dinner",
+        "amount": 62.5,
+        "paidBy": "user-alex",
+        "participants": [
+          "user-alex",
+>>>>>>> Stashed changes
           "alex",
           "maya",
           "jordan",
@@ -437,7 +486,11 @@
         ],
         "groupId": "apt",
         "category": "🍔",
+<<<<<<< Updated upstream
         "date": 1781098802046,
+=======
+        "date": 1781012058628,
+>>>>>>> Stashed changes
         "note": null,
         "splitMethod": "equal",
         "splits": {},
@@ -450,32 +503,54 @@
         "amount": 90,
         "paidBy": "alex",
         "participants": [
+<<<<<<< Updated upstream
           "user-you",
+=======
+          "user-alex",
+>>>>>>> Stashed changes
           "alex"
         ],
         "groupId": "apt",
         "category": "🛒",
+<<<<<<< Updated upstream
         "date": 1781008802046,
         "note": null,
         "splitMethod": "equal",
         "splits": {},
         "settled": false,
+=======
+        "date": 1780922058628,
+        "note": null,
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": true,
+>>>>>>> Stashed changes
         "personal": false
       },
       {
         "id": "e3",
         "title": "Utilities - Oct",
         "amount": 240,
+<<<<<<< Updated upstream
         "paidBy": "user-you",
         "participants": [
           "user-you",
+=======
+        "paidBy": "user-alex",
+        "participants": [
+          "user-alex",
+>>>>>>> Stashed changes
           "alex",
           "jordan",
           "sam"
         ],
         "groupId": "apt",
         "category": "⚡",
+<<<<<<< Updated upstream
         "date": 1780929602046,
+=======
+        "date": 1780842858628,
+>>>>>>> Stashed changes
         "note": null,
         "splitMethod": "equal",
         "splits": {},
@@ -486,14 +561,24 @@
         "id": "e4",
         "title": "Cinema Tickets",
         "amount": 48,
+<<<<<<< Updated upstream
         "paidBy": "user-you",
         "participants": [
           "user-you",
+=======
+        "paidBy": "user-alex",
+        "participants": [
+          "user-alex",
+>>>>>>> Stashed changes
           "maya"
         ],
         "groupId": "trip",
         "category": "🎬",
+<<<<<<< Updated upstream
         "date": 1780670402046,
+=======
+        "date": 1780583658628,
+>>>>>>> Stashed changes
         "note": null,
         "splitMethod": "equal",
         "splits": {},
@@ -506,14 +591,22 @@
         "amount": 120,
         "paidBy": "chloe",
         "participants": [
+<<<<<<< Updated upstream
           "user-you",
+=======
+          "user-alex",
+>>>>>>> Stashed changes
           "alex",
           "maya",
           "chloe"
         ],
         "groupId": "beach",
         "category": "🔥",
+<<<<<<< Updated upstream
         "date": 1780324802046,
+=======
+        "date": 1780238058628,
+>>>>>>> Stashed changes
         "note": null,
         "splitMethod": "equal",
         "splits": {},
@@ -524,6 +617,7 @@
         "id": "p1",
         "title": "Morning Coffee",
         "amount": 4.75,
+<<<<<<< Updated upstream
         "paidBy": "user-you",
         "participants": [
           "user-you"
@@ -531,6 +625,15 @@
         "groupId": null,
         "category": "☕",
         "date": 1781095202046,
+=======
+        "paidBy": "user-alex",
+        "participants": [
+          "user-alex"
+        ],
+        "groupId": null,
+        "category": "☕",
+        "date": 1781008458628,
+>>>>>>> Stashed changes
         "note": "Food",
         "splitMethod": "equal",
         "splits": {},
@@ -541,6 +644,7 @@
         "id": "p2",
         "title": "Metro Card",
         "amount": 30,
+<<<<<<< Updated upstream
         "paidBy": "user-you",
         "participants": [
           "user-you"
@@ -548,6 +652,15 @@
         "groupId": null,
         "category": "🚇",
         "date": 1781016002046,
+=======
+        "paidBy": "user-alex",
+        "participants": [
+          "user-alex"
+        ],
+        "groupId": null,
+        "category": "🚇",
+        "date": 1780929258628,
+>>>>>>> Stashed changes
         "note": "Transport",
         "splitMethod": "equal",
         "splits": {},
@@ -558,6 +671,7 @@
         "id": "p3",
         "title": "Spotify",
         "amount": 10.99,
+<<<<<<< Updated upstream
         "paidBy": "user-you",
         "participants": [
           "user-you"
@@ -565,6 +679,15 @@
         "groupId": null,
         "category": "🎧",
         "date": 1780843202046,
+=======
+        "paidBy": "user-alex",
+        "participants": [
+          "user-alex"
+        ],
+        "groupId": null,
+        "category": "🎧",
+        "date": 1780756458628,
+>>>>>>> Stashed changes
         "note": "Bills",
         "splitMethod": "equal",
         "splits": {},
@@ -575,6 +698,7 @@
         "id": "p4",
         "title": "Gym Membership",
         "amount": 45,
+<<<<<<< Updated upstream
         "paidBy": "user-you",
         "participants": [
           "user-you"
@@ -582,6 +706,15 @@
         "groupId": null,
         "category": "💪",
         "date": 1780584002046,
+=======
+        "paidBy": "user-alex",
+        "participants": [
+          "user-alex"
+        ],
+        "groupId": null,
+        "category": "💪",
+        "date": 1780497258628,
+>>>>>>> Stashed changes
         "note": "Health",
         "splitMethod": "equal",
         "splits": {},
@@ -747,7 +880,11 @@
         ],
         "groupId": "apt",
         "category": "🍔",
+<<<<<<< Updated upstream
         "date": 1781098980343,
+=======
+        "date": 1781013547467,
+>>>>>>> Stashed changes
         "note": null,
         "settled": false,
         "personal": false
@@ -763,7 +900,11 @@
         ],
         "groupId": "apt",
         "category": "🛒",
+<<<<<<< Updated upstream
         "date": 1781008980343,
+=======
+        "date": 1780923547467,
+>>>>>>> Stashed changes
         "note": null,
         "settled": false,
         "personal": false
@@ -781,7 +922,11 @@
         ],
         "groupId": "apt",
         "category": "⚡",
+<<<<<<< Updated upstream
         "date": 1780929780343,
+=======
+        "date": 1780844347467,
+>>>>>>> Stashed changes
         "note": null,
         "settled": false,
         "personal": false
@@ -797,7 +942,11 @@
         ],
         "groupId": "trip",
         "category": "🎬",
+<<<<<<< Updated upstream
         "date": 1780670580343,
+=======
+        "date": 1780585147467,
+>>>>>>> Stashed changes
         "note": null,
         "settled": false,
         "personal": false
@@ -815,7 +964,11 @@
         ],
         "groupId": "beach",
         "category": "🔥",
+<<<<<<< Updated upstream
         "date": 1780324980343,
+=======
+        "date": 1780239547467,
+>>>>>>> Stashed changes
         "note": null,
         "settled": true,
         "personal": false
@@ -830,7 +983,11 @@
         ],
         "groupId": null,
         "category": "☕",
+<<<<<<< Updated upstream
         "date": 1781095380343,
+=======
+        "date": 1781009947467,
+>>>>>>> Stashed changes
         "note": "Food",
         "settled": false,
         "personal": true
@@ -845,7 +1002,11 @@
         ],
         "groupId": null,
         "category": "🚇",
+<<<<<<< Updated upstream
         "date": 1781016180343,
+=======
+        "date": 1780930747467,
+>>>>>>> Stashed changes
         "note": "Transport",
         "settled": false,
         "personal": true
@@ -860,7 +1021,11 @@
         ],
         "groupId": null,
         "category": "🎧",
+<<<<<<< Updated upstream
         "date": 1780843380343,
+=======
+        "date": 1780757947467,
+>>>>>>> Stashed changes
         "note": "Bills",
         "settled": false,
         "personal": true
@@ -875,7 +1040,11 @@
         ],
         "groupId": null,
         "category": "💪",
+<<<<<<< Updated upstream
         "date": 1780584180343,
+=======
+        "date": 1780498747467,
+>>>>>>> Stashed changes
         "note": "Health",
         "settled": false,
         "personal": true
