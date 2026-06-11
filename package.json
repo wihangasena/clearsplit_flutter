@@ -4,7 +4,8 @@
   "description": "ClearSplit - Expense sharing app",
   "type": "module",
   "scripts": {
-    "dev": "flutter run -d web-server --web-port=8080",
+    "backend": "cd backend && dart run bin/server.dart",
+    "dev": "powershell -NoProfile -ExecutionPolicy Bypass -File tool/dev.ps1",
     "build": "flutter build web",
     "test": "flutter test"
   },

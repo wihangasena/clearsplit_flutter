@@ -14,9 +14,7 @@ class AppBootstrap extends StatelessWidget {
       animation: controller,
       builder: (context, _) {
         return controller.state.people.isEmpty
-            ? const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              )
+            ? const Scaffold(body: Center(child: CircularProgressIndicator()))
             : BuddySplitHome(controller: controller);
       },
     );
@@ -66,7 +64,10 @@ class _BuddySplitHomeState extends State<BuddySplitHome> {
         onOpenGroup: (groupId) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => GroupDetailScreen(controller: widget.controller, groupId: groupId),
+              builder: (_) => GroupDetailScreen(
+                controller: widget.controller,
+                groupId: groupId,
+              ),
             ),
           );
         },
@@ -76,7 +77,10 @@ class _BuddySplitHomeState extends State<BuddySplitHome> {
         onOpenGroup: (groupId) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => GroupDetailScreen(controller: widget.controller, groupId: groupId),
+              builder: (_) => GroupDetailScreen(
+                controller: widget.controller,
+                groupId: groupId,
+              ),
             ),
           );
         },
@@ -150,7 +154,12 @@ class _BuddySplitHomeState extends State<BuddySplitHome> {
 }
 
 class _NavItem extends StatelessWidget {
-  const _NavItem({required this.label, required this.icon, required this.active, required this.onTap});
+  const _NavItem({
+    required this.label,
+    required this.icon,
+    required this.active,
+    required this.onTap,
+  });
 
   final String label;
   final IconData icon;
@@ -183,7 +192,11 @@ class _NavItem extends StatelessWidget {
                     ]
                   : null,
             ),
-            child: Icon(icon, size: 20, color: active ? colorScheme.primary : Colors.grey.shade500),
+            child: Icon(
+              icon,
+              size: 20,
+              color: active ? colorScheme.primary : Colors.grey.shade500,
+            ),
           ),
           const SizedBox(height: 1),
           Text(
@@ -222,8 +235,14 @@ class DashboardScreen extends StatelessWidget {
     final balances = controller.computeBalances();
     final topGroup = controller.topGroup;
     final recent = controller.recentSharedExpenses;
-    final groupExpenses = topGroup == null ? <Expense>[] : state.expenses.where((expense) => expense.groupId == topGroup.id).toList();
-    final settledPct = topGroup == null ? 0 : controller.settledPercent(topGroup.id);
+    final groupExpenses = topGroup == null
+        ? <Expense>[]
+        : state.expenses
+              .where((expense) => expense.groupId == topGroup.id)
+              .toList();
+    final settledPct = topGroup == null
+        ? 0
+        : controller.settledPercent(topGroup.id);
     final personalTotal = controller.personalTotal;
 
     return SafeArea(
@@ -236,7 +255,10 @@ class DashboardScreen extends StatelessWidget {
             trailing: CircleAvatar(
               radius: 22,
               backgroundColor: const Color(0xFFDDF4EE),
-              child: Text(state.people.first.avatar, style: const TextStyle(fontSize: 20)),
+              child: Text(
+                state.people.first.avatar,
+                style: const TextStyle(fontSize: 20),
+              ),
             ),
           ),
           const SizedBox(height: 18),
@@ -247,14 +269,21 @@ class DashboardScreen extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                final person = state.people.where((person) => person.id != state.me).toList()[index];
+                final person = state.people
+                    .where((person) => person.id != state.me)
+                    .toList()[index];
                 return _PersonPokeCard(
                   person: person,
-                  onTap: () => _toast(context, 'Poked ${person.name} - they will get a reminder.'),
+                  onTap: () => _toast(
+                    context,
+                    'Poked ${person.name} - they will get a reminder.',
+                  ),
                 );
               },
               separatorBuilder: (_, _) => const SizedBox(width: 12),
-              itemCount: state.people.where((person) => person.id != state.me).length,
+              itemCount: state.people
+                  .where((person) => person.id != state.me)
+                  .length,
             ),
           ),
           const SizedBox(height: 18),
@@ -288,7 +317,9 @@ class DashboardScreen extends StatelessWidget {
                   style: FilledButton.styleFrom(
                     backgroundColor: const Color(0xFF0F766E),
                     minimumSize: const Size.fromHeight(56),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                   ),
                   icon: const Icon(Icons.add_rounded),
                   label: const Text('Add Expense'),
@@ -303,7 +334,9 @@ class DashboardScreen extends StatelessWidget {
                   style: FilledButton.styleFrom(
                     backgroundColor: const Color(0xFFF4A261),
                     padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                   ),
                   child: const Icon(Icons.person_add_alt_1_rounded),
                 ),
@@ -322,7 +355,8 @@ class DashboardScreen extends StatelessWidget {
           _SectionHeader(
             title: 'Recent Activity',
             actionLabel: 'View All',
-            onAction: () => _toast(context, 'Open Activity tab to see the full feed.'),
+            onAction: () =>
+                _toast(context, 'Open Activity tab to see the full feed.'),
           ),
           const SizedBox(height: 10),
           ...recent.map((expense) {
@@ -334,7 +368,9 @@ class DashboardScreen extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: _ExpenseTile(
                 title: expense.title,
-                subtitle: youPaid ? 'You paid - split ${expense.participants.length}' : 'Paid by ${payer?.name ?? 'Unknown'}',
+                subtitle: youPaid
+                    ? 'You paid - split ${expense.participants.length}'
+                    : 'Paid by ${payer?.name ?? 'Unknown'}',
                 leading: expense.category,
                 amount: delta,
                 timestamp: timeAgo(expense.date),
@@ -358,7 +394,10 @@ class DashboardScreen extends StatelessWidget {
           const SizedBox(height: 18),
           _SectionLabel(text: 'TREND'),
           const SizedBox(height: 10),
-          _TrendCard(summary: balances, groupExpenseCount: groupExpenses.length),
+          _TrendCard(
+            summary: balances,
+            groupExpenseCount: groupExpenses.length,
+          ),
         ],
       ),
     );
@@ -366,7 +405,12 @@ class DashboardScreen extends StatelessWidget {
 }
 
 class GroupsScreen extends StatelessWidget {
-  const GroupsScreen({super.key, required this.controller, required this.onOpenGroup, required this.onCreateGroup});
+  const GroupsScreen({
+    super.key,
+    required this.controller,
+    required this.onOpenGroup,
+    required this.onCreateGroup,
+  });
 
   final AppController controller;
   final void Function(String groupId) onOpenGroup;
@@ -386,11 +430,17 @@ class GroupsScreen extends StatelessWidget {
             trailing: IconButton.filledTonal(
               onPressed: onCreateGroup,
               icon: const Icon(Icons.add_rounded),
-              style: IconButton.styleFrom(backgroundColor: const Color(0xFFF5F1E8)),
+              style: IconButton.styleFrom(
+                backgroundColor: const Color(0xFFF5F1E8),
+              ),
             ),
           ),
           const SizedBox(height: 18),
-          _SectionHeader(title: 'Your Crews', actionLabel: 'Create', onAction: onCreateGroup),
+          _SectionHeader(
+            title: 'Your Crews',
+            actionLabel: 'Create',
+            onAction: onCreateGroup,
+          ),
           const SizedBox(height: 12),
           ...state.groups.map((group) {
             final total = controller.groupTotal(group.id);
@@ -400,7 +450,10 @@ class GroupsScreen extends StatelessWidget {
                 group: group,
                 total: total,
                 onTap: () => onOpenGroup(group.id),
-                memberAvatars: group.members.map((memberId) => controller.personById(memberId)).whereType<Person>().toList(),
+                memberAvatars: group.members
+                    .map((memberId) => controller.personById(memberId))
+                    .whereType<Person>()
+                    .toList(),
               ),
             );
           }),
@@ -417,10 +470,17 @@ class ActivityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final balances = controller.computeBalances();
     final shared = controller.sharedExpenses;
-    final today = shared.where((expense) => DateTime.now().difference(expense.date).inHours < 24).toList();
-    final earlier = shared.where((expense) => DateTime.now().difference(expense.date).inHours >= 24).toList();
+    final today = shared
+        .where(
+          (expense) => DateTime.now().difference(expense.date).inHours < 24,
+        )
+        .toList();
+    final earlier = shared
+        .where(
+          (expense) => DateTime.now().difference(expense.date).inHours >= 24,
+        )
+        .toList();
 
     return SafeArea(
       child: ListView(
@@ -450,7 +510,10 @@ class ActivityScreen extends StatelessWidget {
                           color: Colors.white.withValues(alpha: 0.14),
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const Icon(Icons.bolt_rounded, color: Colors.white),
+                        child: const Icon(
+                          Icons.bolt_rounded,
+                          color: Colors.white,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -469,7 +532,12 @@ class ActivityScreen extends StatelessWidget {
                             const SizedBox(height: 4),
                             const Text(
                               'Live feed and reminders',
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white, height: 1.05),
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                                height: 1.05,
+                              ),
                             ),
                           ],
                         ),
@@ -479,7 +547,10 @@ class ActivityScreen extends StatelessWidget {
                   const SizedBox(height: 14),
                   Text(
                     'Track what changed, settle what is due, and keep the group moving.',
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.82), height: 1.35),
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.82),
+                      height: 1.35,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Wrap(
@@ -512,33 +583,43 @@ class ActivityScreen extends StatelessWidget {
           if (today.isNotEmpty) ...[
             const _SectionLabel(text: 'TODAY'),
             const SizedBox(height: 10),
-            ...today.map((expense) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: _ActivityCard(
-                    controller: controller,
-                    expense: expense,
-                    onPoke: (name) => _toast(context, 'Poked $name.'),
-                  ),
-                )),
+            ...today.map(
+              (expense) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _ActivityCard(
+                  controller: controller,
+                  expense: expense,
+                  onPoke: (name) => _toast(context, 'Poked $name.'),
+                ),
+              ),
+            ),
           ],
           if (earlier.isNotEmpty) ...[
             const _SectionLabel(text: 'EARLIER'),
             const SizedBox(height: 10),
-            ...earlier.map((expense) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: _ActivityCard(
-                    controller: controller,
-                    expense: expense,
-                    onPoke: (name) => _toast(context, 'Poked $name.'),
-                  ),
-                )),
+            ...earlier.map(
+              (expense) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _ActivityCard(
+                  controller: controller,
+                  expense: expense,
+                  onPoke: (name) => _toast(context, 'Poked $name.'),
+                ),
+              ),
+            ),
           ],
           const SizedBox(height: 4),
           FilledButton.tonalIcon(
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => ScanScreen(controller: controller))),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ScanScreen(controller: controller),
+              ),
+            ),
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(54),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
             ),
             icon: const Icon(Icons.receipt_long_rounded),
             label: const Text('Split Receipt'),
@@ -611,12 +692,17 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(height: 18),
           FilledButton.tonalIcon(
             onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
               await controller.resetCurrentAccount();
-              _toast(context, 'Demo data restored.');
+              messenger.showSnackBar(
+                const SnackBar(content: Text('Demo data restored.')),
+              );
             },
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(54),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
             ),
             icon: const Icon(Icons.refresh_rounded),
             label: const Text('Reset Demo Data'),
@@ -628,7 +714,9 @@ class ProfileScreen extends StatelessWidget {
             },
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(54),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
             ),
             icon: const Icon(Icons.logout_rounded),
             label: const Text('Sign Out'),
@@ -658,17 +746,25 @@ class MyExpensesScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 120),
         children: [
           _GradientBalanceCard(
-            summary: BalanceSummary(owed: 0, owe: total, net: -total, perPerson: const {}),
+            summary: BalanceSummary(
+              owed: 0,
+              owe: total,
+              net: -total,
+              perPerson: const {},
+            ),
             title: 'Private spending',
             trailingText: money(total),
             subtitle: 'Only you can see this list',
           ),
           const SizedBox(height: 16),
           FilledButton.icon(
-            onPressed: () => showAddExpenseSheet(context, controller, personal: true),
+            onPressed: () =>
+                showAddExpenseSheet(context, controller, personal: true),
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(54),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
               backgroundColor: const Color(0xFF0F766E),
             ),
             icon: const Icon(Icons.add_rounded),
@@ -694,7 +790,11 @@ class MyExpensesScreen extends StatelessWidget {
 }
 
 class GroupDetailScreen extends StatelessWidget {
-  const GroupDetailScreen({super.key, required this.controller, required this.groupId});
+  const GroupDetailScreen({
+    super.key,
+    required this.controller,
+    required this.groupId,
+  });
 
   final AppController controller;
   final String groupId;
@@ -709,7 +809,9 @@ class GroupDetailScreen extends StatelessWidget {
       );
     }
 
-    final groupExpenses = controller.state.expenses.where((expense) => expense.groupId == groupId).toList();
+    final groupExpenses = controller.state.expenses
+        .where((expense) => expense.groupId == groupId)
+        .toList();
     final groceries = controller.groceryForGroup(groupId);
     final total = controller.groupTotal(groupId);
     final settled = controller.settledPercent(groupId);
@@ -733,11 +835,17 @@ class GroupDetailScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: FilledButton.icon(
-                  onPressed: () => showAddExpenseSheet(context, controller, initialGroupId: group.id),
+                  onPressed: () => showAddExpenseSheet(
+                    context,
+                    controller,
+                    initialGroupId: group.id,
+                  ),
                   style: FilledButton.styleFrom(
                     minimumSize: const Size.fromHeight(54),
                     backgroundColor: const Color(0xFF0F766E),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                   ),
                   icon: const Icon(Icons.add_rounded),
                   label: const Text('Add Expense'),
@@ -748,11 +856,16 @@ class GroupDetailScreen extends StatelessWidget {
                 width: 54,
                 height: 54,
                 child: FilledButton(
-                  onPressed: () => _toast(context, 'Grocery list is already wired into this group.'),
+                  onPressed: () => _toast(
+                    context,
+                    'Grocery list is already wired into this group.',
+                  ),
                   style: FilledButton.styleFrom(
                     backgroundColor: const Color(0xFFF4A261),
                     padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                   ),
                   child: const Icon(Icons.shopping_bag_rounded),
                 ),
@@ -762,11 +875,14 @@ class GroupDetailScreen extends StatelessWidget {
                 width: 54,
                 height: 54,
                 child: FilledButton(
-                  onPressed: () => showManageMembersSheet(context, controller, group),
+                  onPressed: () =>
+                      showManageMembersSheet(context, controller, group),
                   style: FilledButton.styleFrom(
                     backgroundColor: const Color(0xFFEEF2FF),
                     padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                   ),
                   child: const Icon(Icons.manage_accounts_rounded),
                 ),
@@ -774,53 +890,64 @@ class GroupDetailScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
+          _SettlementSection(
+            groupId: groupId,
+            controller: controller,
+            group: group,
+          ),
+          const SizedBox(height: 16),
           const _SectionLabel(text: 'SHARED EXPENSES'),
           const SizedBox(height: 10),
-          ...groupExpenses.map(
-            (expense) {
-              final me = controller.state.me;
-              final youPaid = expense.paidBy == me;
-              final youAreIncluded = expense.participants.contains(me);
-              final youOwe = !expense.settled && !youPaid && youAreIncluded;
-              final share = youAreIncluded ? expense.getParticipantShare(me).toDouble() : 0.0;
+          ...groupExpenses.map((expense) {
+            final me = controller.state.me;
+            final youPaid = expense.paidBy == me;
+            final youAreIncluded = expense.participants.contains(me);
+            final youOwe = !expense.settled && !youPaid && youAreIncluded;
+            final share = youAreIncluded
+                ? expense.getParticipantShare(me).toDouble()
+                : 0.0;
 
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: _ExpenseTile(
-                  title: expense.title,
-                  subtitle: expense.personal
-                      ? 'Private expense'
-                      : expense.settled
-                          ? 'Settled'
-                          : youPaid
-                              ? 'You paid - split ${expense.participants.length} people'
-                              : youOwe
-                                  ? 'You owe ${money(share)}'
-                                  : 'Split with ${expense.participants.length} people',
-                  leading: expense.category,
-                  amount: youOwe ? share : expense.amount,
-                  timestamp: timeAgo(expense.date),
-                  positive: youPaid,
-                  action: expense.settled
-                      ? const _StatusPill(label: 'Settled', color: Color(0xFF0F766E))
-                      : youOwe
-                          ? FilledButton.tonalIcon(
-                              onPressed: () {
-                                controller.markSettled(expense.id);
-                                _toast(context, 'Marked as settled.');
-                              },
-                              style: FilledButton.styleFrom(
-                                minimumSize: const Size(0, 36),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-                              ),
-                              icon: const Icon(Icons.payments_rounded, size: 16),
-                              label: const Text('Settle'),
-                            )
-                          : null,
-                ),
-              );
-            },
-          ),
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: _ExpenseTile(
+                title: expense.title,
+                subtitle: expense.personal
+                    ? 'Private expense'
+                    : expense.settled
+                    ? 'Settled'
+                    : youPaid
+                    ? 'You paid - split ${expense.participants.length} people'
+                    : youOwe
+                    ? 'You owe ${money(share)}'
+                    : 'Split with ${expense.participants.length} people',
+                leading: expense.category,
+                amount: youOwe ? share : expense.amount,
+                timestamp: timeAgo(expense.date),
+                positive: youPaid,
+                action: expense.settled
+                    ? const _StatusPill(
+                        label: 'Settled',
+                        color: Color(0xFF0F766E),
+                      )
+                    : youOwe
+                    ? FilledButton.tonalIcon(
+                        onPressed: () {
+                          controller.markSettled(expense.id);
+                          _toast(context, 'Marked as settled.');
+                        },
+                        style: FilledButton.styleFrom(
+                          minimumSize: const Size(0, 36),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                        ),
+                        icon: const Icon(Icons.payments_rounded, size: 16),
+                        label: const Text('Settle'),
+                      )
+                    : null,
+              ),
+            );
+          }),
           const SizedBox(height: 16),
           const _SectionLabel(text: 'GROCERY LIST'),
           const SizedBox(height: 10),
@@ -835,12 +962,18 @@ class GroupDetailScreen extends StatelessWidget {
                       width: 42,
                       height: 42,
                       decoration: BoxDecoration(
-                        color: item.done ? const Color(0xFFC7F3E7) : const Color(0xFFF5F1E8),
+                        color: item.done
+                            ? const Color(0xFFC7F3E7)
+                            : const Color(0xFFF5F1E8),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Icon(
-                        item.done ? Icons.check_rounded : Icons.shopping_cart_rounded,
-                        color: item.done ? const Color(0xFF0F766E) : Colors.grey.shade700,
+                        item.done
+                            ? Icons.check_rounded
+                            : Icons.shopping_cart_rounded,
+                        color: item.done
+                            ? const Color(0xFF0F766E)
+                            : Colors.grey.shade700,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -848,16 +981,29 @@ class GroupDetailScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(item.name, style: const TextStyle(fontWeight: FontWeight.w800)),
+                          Text(
+                            item.name,
+                            style: const TextStyle(fontWeight: FontWeight.w800),
+                          ),
                           const SizedBox(height: 4),
                           Text(
-                            [item.tag, item.qty].whereType<String>().join(' · '),
-                            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                            [
+                              item.tag,
+                              item.qty,
+                            ].whereType<String>().join(' · '),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    if (item.price != null) Text(money(item.price!), style: const TextStyle(fontWeight: FontWeight.w800)),
+                    if (item.price != null)
+                      Text(
+                        money(item.price!),
+                        style: const TextStyle(fontWeight: FontWeight.w800),
+                      ),
                   ],
                 ),
               ),
@@ -908,11 +1054,23 @@ class ScanScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(Icons.document_scanner_rounded, size: 72, color: Color(0xFF0F766E)),
+                      Icon(
+                        Icons.document_scanner_rounded,
+                        size: 72,
+                        color: Color(0xFF0F766E),
+                      ),
                       SizedBox(height: 14),
-                      Text('Place receipt in frame', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                      Text(
+                        'Place receipt in frame',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                       SizedBox(height: 6),
-                      Text('BuddySplit will detect totals and suggested splits.'),
+                      Text(
+                        'BuddySplit will detect totals and suggested splits.',
+                      ),
                     ],
                   ),
                 ),
@@ -948,7 +1106,9 @@ class ScanScreen extends StatelessWidget {
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(54),
               backgroundColor: const Color(0xFF0F766E),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
             ),
             icon: const Icon(Icons.auto_awesome_rounded),
             label: const Text('Use Demo Receipt'),
@@ -958,7 +1118,9 @@ class ScanScreen extends StatelessWidget {
             onPressed: () => showAddExpenseSheet(context, controller),
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(54),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
             ),
             icon: const Icon(Icons.receipt_long_rounded),
             label: const Text('Open Split Flow'),
@@ -970,7 +1132,11 @@ class ScanScreen extends StatelessWidget {
 }
 
 class _ProfileHero extends StatelessWidget {
-  const _ProfileHero({required this.person, required this.summary, required this.onEdit});
+  const _ProfileHero({
+    required this.person,
+    required this.summary,
+    required this.onEdit,
+  });
 
   final Person person;
   final BalanceSummary summary;
@@ -989,9 +1155,18 @@ class _ProfileHero extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(person.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
+                Text(
+                  person.name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text('You are owed ${money(summary.owed)}', style: TextStyle(color: Colors.grey.shade700)),
+                Text(
+                  'You are owed ${money(summary.owed)}',
+                  style: TextStyle(color: Colors.grey.shade700),
+                ),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
@@ -1010,7 +1185,12 @@ class _ProfileHero extends StatelessWidget {
 }
 
 class _GroupHeroCard extends StatelessWidget {
-  const _GroupHeroCard({required this.group, required this.total, required this.settledPercent, required this.memberCount});
+  const _GroupHeroCard({
+    required this.group,
+    required this.total,
+    required this.settledPercent,
+    required this.memberCount,
+  });
 
   final Group group;
   final double total;
@@ -1033,16 +1213,30 @@ class _GroupHeroCard extends StatelessWidget {
                   color: const Color(0xFFC7F3E7),
                   borderRadius: BorderRadius.circular(18),
                 ),
-                child: Center(child: Text(group.emoji, style: const TextStyle(fontSize: 28))),
+                child: Center(
+                  child: Text(
+                    group.emoji,
+                    style: const TextStyle(fontSize: 28),
+                  ),
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(group.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+                    Text(
+                      group.name,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
                     const SizedBox(height: 4),
-                    Text('$memberCount members · ${money(total)} tracked', style: TextStyle(color: Colors.grey.shade700)),
+                    Text(
+                      '$memberCount members · ${money(total)} tracked',
+                      style: TextStyle(color: Colors.grey.shade700),
+                    ),
                   ],
                 ),
               ),
@@ -1059,7 +1253,10 @@ class _GroupHeroCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Text('$settledPercent% settled', style: const TextStyle(fontWeight: FontWeight.w800)),
+          Text(
+            '$settledPercent% settled',
+            style: const TextStyle(fontWeight: FontWeight.w800),
+          ),
         ],
       ),
     );
@@ -1067,7 +1264,12 @@ class _GroupHeroCard extends StatelessWidget {
 }
 
 class _GroupTile extends StatelessWidget {
-  const _GroupTile({required this.group, required this.total, required this.onTap, required this.memberAvatars});
+  const _GroupTile({
+    required this.group,
+    required this.total,
+    required this.onTap,
+    required this.memberAvatars,
+  });
 
   final Group group;
   final double total;
@@ -1088,16 +1290,27 @@ class _GroupTile extends StatelessWidget {
               color: const Color(0xFFF5F1E8),
               borderRadius: BorderRadius.circular(18),
             ),
-            child: Center(child: Text(group.emoji, style: const TextStyle(fontSize: 30))),
+            child: Center(
+              child: Text(group.emoji, style: const TextStyle(fontSize: 30)),
+            ),
           ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(group.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900)),
+                Text(
+                  group.name,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text('${group.members.length} members · ${money(total)} tracked', style: TextStyle(color: Colors.grey.shade700, fontSize: 12)),
+                Text(
+                  '${group.members.length} members · ${money(total)} tracked',
+                  style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+                ),
                 const SizedBox(height: 8),
                 SizedBox(
                   height: 26,
@@ -1107,7 +1320,11 @@ class _GroupTile extends StatelessWidget {
                       for (int i = 0; i < memberAvatars.take(5).length; i++)
                         Positioned(
                           left: i * 18,
-                          child: _PersonAvatar(person: memberAvatars[i], size: 26, ring: true),
+                          child: _PersonAvatar(
+                            person: memberAvatars[i],
+                            size: 26,
+                            ring: true,
+                          ),
                         ),
                     ],
                   ),
@@ -1123,7 +1340,15 @@ class _GroupTile extends StatelessWidget {
 }
 
 class _ExpenseTile extends StatelessWidget {
-  const _ExpenseTile({required this.title, required this.subtitle, required this.leading, required this.amount, required this.timestamp, this.positive = false, this.action});
+  const _ExpenseTile({
+    required this.title,
+    required this.subtitle,
+    required this.leading,
+    required this.amount,
+    required this.timestamp,
+    this.positive = false,
+    this.action,
+  });
 
   final String title;
   final String subtitle;
@@ -1135,7 +1360,9 @@ class _ExpenseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = positive || amount >= 0 ? const Color(0xFF0F766E) : const Color(0xFFDC2626);
+    final color = positive || amount >= 0
+        ? const Color(0xFF0F766E)
+        : const Color(0xFFDC2626);
     final sign = positive || amount >= 0 ? '+' : '-';
 
     return _SurfaceCard(
@@ -1149,29 +1376,40 @@ class _ExpenseTile extends StatelessWidget {
               color: const Color(0xFFF5F1E8),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Center(child: Text(leading, style: const TextStyle(fontSize: 22))),
+            child: Center(
+              child: Text(leading, style: const TextStyle(fontSize: 22)),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
                 const SizedBox(height: 4),
-                Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
+                Text(
+                  subtitle,
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                ),
               ],
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('$sign${money(amount.abs())}', style: TextStyle(fontWeight: FontWeight.w900, color: color)),
+              Text(
+                '$sign${money(amount.abs())}',
+                style: TextStyle(fontWeight: FontWeight.w900, color: color),
+              ),
               const SizedBox(height: 4),
-              Text(timestamp, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
-              if (action != null) ...[
-                const SizedBox(height: 8),
-                action!,
-              ],
+              Text(
+                timestamp,
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+              ),
+              if (action != null) ...[const SizedBox(height: 8), action!],
             ],
           ),
         ],
@@ -1181,7 +1419,11 @@ class _ExpenseTile extends StatelessWidget {
 }
 
 class _ActivityCard extends StatelessWidget {
-  const _ActivityCard({required this.controller, required this.expense, required this.onPoke});
+  const _ActivityCard({
+    required this.controller,
+    required this.expense,
+    required this.onPoke,
+  });
 
   final AppController controller;
   final Expense expense;
@@ -1194,7 +1436,9 @@ class _ActivityCard extends StatelessWidget {
     final youPaid = expense.paidBy == me;
     final youAreIncluded = expense.participants.contains(me);
     final youOwe = !expense.settled && !youPaid && youAreIncluded;
-    final share = youAreIncluded ? expense.getParticipantShare(me).toDouble() : 0.0;
+    final share = youAreIncluded
+        ? expense.getParticipantShare(me).toDouble()
+        : 0.0;
 
     return _SurfaceCard(
       padding: const EdgeInsets.all(14),
@@ -1212,23 +1456,49 @@ class _ActivityCard extends StatelessWidget {
                     Text.rich(
                       TextSpan(
                         children: [
-                          TextSpan(text: '${payer?.id == me ? 'You' : payer?.name ?? 'Unknown'} ', style: const TextStyle(fontWeight: FontWeight.w800)),
-                          const TextSpan(text: 'added ', style: TextStyle(color: Colors.black87)),
-                          TextSpan(text: expense.title, style: const TextStyle(fontWeight: FontWeight.w800)),
+                          TextSpan(
+                            text:
+                                '${payer?.id == me ? 'You' : payer?.name ?? 'Unknown'} ',
+                            style: const TextStyle(fontWeight: FontWeight.w800),
+                          ),
+                          const TextSpan(
+                            text: 'added ',
+                            style: TextStyle(color: Colors.black87),
+                          ),
+                          TextSpan(
+                            text: expense.title,
+                            style: const TextStyle(fontWeight: FontWeight.w800),
+                          ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text('${expense.category} · ${timeAgo(expense.date)}', style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
+                    Text(
+                      '${expense.category} · ${timeAgo(expense.date)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
                   ],
                 ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(money(expense.amount), style: const TextStyle(fontWeight: FontWeight.w900)),
+                  Text(
+                    money(expense.amount),
+                    style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
                   if (youOwe)
-                    Text('You owe ${money(share)}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF0F766E))),
+                    Text(
+                      'You owe ${money(share)}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF0F766E),
+                      ),
+                    ),
                 ],
               ),
             ],
@@ -1252,7 +1522,9 @@ class _ActivityCard extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   backgroundColor: const Color(0xFF0F766E),
                   minimumSize: const Size(0, 36),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
+                  ),
                 ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
@@ -1272,7 +1544,11 @@ class _ActivityCard extends StatelessWidget {
 }
 
 class _MetricCard extends StatelessWidget {
-  const _MetricCard({required this.title, required this.value, required this.accent});
+  const _MetricCard({
+    required this.title,
+    required this.value,
+    required this.accent,
+  });
 
   final String title;
   final String value;
@@ -1285,9 +1561,23 @@ class _MetricCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey.shade700)),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: Colors.grey.shade700,
+            ),
+          ),
           const SizedBox(height: 8),
-          Text(value, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: accent)),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+              color: accent,
+            ),
+          ),
         ],
       ),
     );
@@ -1308,7 +1598,10 @@ class _TrendCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('7-Day Trend', style: TextStyle(fontWeight: FontWeight.w800)),
+          const Text(
+            '7-Day Trend',
+            style: TextStyle(fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -1320,7 +1613,9 @@ class _TrendCard extends StatelessWidget {
                     width: 18,
                     height: bars[i] * 0.65,
                     decoration: BoxDecoration(
-                      color: i == bars.length - 1 ? const Color(0xFF0F766E) : const Color(0xFFCBD5E1),
+                      color: i == bars.length - 1
+                          ? const Color(0xFF0F766E)
+                          : const Color(0xFFCBD5E1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -1329,9 +1624,15 @@ class _TrendCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('$groupExpenseCount items', style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+                  Text(
+                    '$groupExpenseCount items',
+                    style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                  ),
                   const SizedBox(height: 4),
-                  Text(summary.net >= 0 ? 'In your favor' : 'You owe', style: const TextStyle(fontWeight: FontWeight.w900)),
+                  Text(
+                    summary.net >= 0 ? 'In your favor' : 'You owe',
+                    style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
                 ],
               ),
             ],
@@ -1367,7 +1668,11 @@ class _GradientBalanceCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
-          BoxShadow(color: const Color(0xFF0F766E).withValues(alpha: 0.22), blurRadius: 28, offset: const Offset(0, 16)),
+          BoxShadow(
+            color: const Color(0xFF0F766E).withValues(alpha: 0.22),
+            blurRadius: 28,
+            offset: const Offset(0, 16),
+          ),
         ],
       ),
       child: Stack(
@@ -1378,7 +1683,10 @@ class _GradientBalanceCard extends StatelessWidget {
             child: Container(
               width: 140,
               height: 140,
-              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.08), shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.08),
+                shape: BoxShape.circle,
+              ),
             ),
           ),
           Padding(
@@ -1388,33 +1696,61 @@ class _GradientBalanceCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.lens_rounded, size: 12, color: Color(0xFF9EF0D0)),
+                    const Icon(
+                      Icons.lens_rounded,
+                      size: 12,
+                      color: Color(0xFF9EF0D0),
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       title.toUpperCase(),
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.6, color: Colors.white),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.6,
+                        color: Colors.white,
+                      ),
                     ),
                     const Spacer(),
                     if (trailingText != null)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.14),
                           borderRadius: BorderRadius.circular(999),
                         ),
-                        child: Text(trailingText!, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.white)),
+                        child: Text(
+                          trailingText!,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                   ],
                 ),
                 const SizedBox(height: 10),
                 Text(
                   money(summary.net.abs()),
-                  style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: Colors.white, height: 1),
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    height: 1,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  subtitle ?? (favor ? 'In your favor this week' : 'You owe this week'),
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.82), fontSize: 13),
+                  subtitle ??
+                      (favor ? 'In your favor this week' : 'You owe this week'),
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.82),
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(height: 18),
                 Row(
@@ -1427,7 +1763,9 @@ class _GradientBalanceCard extends StatelessWidget {
                           width: 18,
                           height: bar * 0.55,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: bar == 100 ? 0.82 : 0.24),
+                            color: Colors.white.withValues(
+                              alpha: bar == 100 ? 0.82 : 0.24,
+                            ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
@@ -1436,9 +1774,22 @@ class _GradientBalanceCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text('7-Day Trend', style: TextStyle(color: Colors.white.withValues(alpha: 0.78), fontSize: 11)),
+                        Text(
+                          '7-Day Trend',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.78),
+                            fontSize: 11,
+                          ),
+                        ),
                         const SizedBox(height: 2),
-                        const Text('Settled', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+                        const Text(
+                          'Settled',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 18,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -1453,7 +1804,12 @@ class _GradientBalanceCard extends StatelessWidget {
 }
 
 class _GroupProgressCard extends StatelessWidget {
-  const _GroupProgressCard({required this.group, required this.total, required this.settledPercent, required this.onTap});
+  const _GroupProgressCard({
+    required this.group,
+    required this.total,
+    required this.settledPercent,
+    required this.onTap,
+  });
 
   final Group group;
   final double total;
@@ -1471,8 +1827,18 @@ class _GroupProgressCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('${group.emoji} ${group.name}', style: const TextStyle(fontWeight: FontWeight.w900)),
-              Text('$settledPercent% Settled', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF0F766E))),
+              Text(
+                '${group.emoji} ${group.name}',
+                style: const TextStyle(fontWeight: FontWeight.w900),
+              ),
+              Text(
+                '$settledPercent% Settled',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF0F766E),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -1486,7 +1852,10 @@ class _GroupProgressCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Text('${money(total)} tracked', style: TextStyle(color: Colors.grey.shade700, fontSize: 12)),
+          Text(
+            '${money(total)} tracked',
+            style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+          ),
         ],
       ),
     );
@@ -1494,7 +1863,12 @@ class _GroupProgressCard extends StatelessWidget {
 }
 
 class _SettingsCard extends StatelessWidget {
-  const _SettingsCard({required this.title, required this.subtitle, required this.icon, required this.onTap});
+  const _SettingsCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.onTap,
+  });
 
   final String title;
   final String subtitle;
@@ -1522,9 +1896,15 @@ class _SettingsCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
                 const SizedBox(height: 4),
-                Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
+                Text(
+                  subtitle,
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                ),
               ],
             ),
           ),
@@ -1536,7 +1916,13 @@ class _SettingsCard extends StatelessWidget {
 }
 
 class _ActionCard extends StatelessWidget {
-  const _ActionCard({required this.onTap, required this.icon, required this.title, required this.subtitle, required this.trailing});
+  const _ActionCard({
+    required this.onTap,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.trailing,
+  });
 
   final VoidCallback onTap;
   final String icon;
@@ -1558,20 +1944,34 @@ class _ActionCard extends StatelessWidget {
               color: const Color(0xFFF5F1E8),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Center(child: Text(icon, style: const TextStyle(fontSize: 24))),
+            child: Center(
+              child: Text(icon, style: const TextStyle(fontSize: 24)),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w900)),
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w900),
+                ),
                 const SizedBox(height: 4),
-                Text(subtitle, style: TextStyle(color: Colors.grey.shade700, fontSize: 12)),
+                Text(
+                  subtitle,
+                  style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+                ),
               ],
             ),
           ),
-          Text(trailing, style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF0F766E))),
+          Text(
+            trailing,
+            style: const TextStyle(
+              fontWeight: FontWeight.w900,
+              color: Color(0xFF0F766E),
+            ),
+          ),
         ],
       ),
     );
@@ -1579,7 +1979,11 @@ class _ActionCard extends StatelessWidget {
 }
 
 class _PageHeader extends StatelessWidget {
-  const _PageHeader({required this.title, required this.subtitle, this.trailing});
+  const _PageHeader({
+    required this.title,
+    required this.subtitle,
+    this.trailing,
+  });
 
   final String title;
   final String subtitle;
@@ -1593,7 +1997,14 @@ class _PageHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w900, height: 1)),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900,
+                  height: 1,
+                ),
+              ),
               const SizedBox(height: 6),
               Text(subtitle, style: TextStyle(color: Colors.grey.shade700)),
             ],
@@ -1606,7 +2017,11 @@ class _PageHeader extends StatelessWidget {
 }
 
 class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.title, required this.actionLabel, required this.onAction});
+  const _SectionHeader({
+    required this.title,
+    required this.actionLabel,
+    required this.onAction,
+  });
 
   final String title;
   final String actionLabel;
@@ -1617,7 +2032,10 @@ class _SectionHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+        Text(
+          title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+        ),
         TextButton(onPressed: onAction, child: Text(actionLabel)),
       ],
     );
@@ -1633,7 +2051,12 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.4, color: Colors.grey.shade600),
+      style: TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.w900,
+        letterSpacing: 1.4,
+        color: Colors.grey.shade600,
+      ),
     );
   }
 }
@@ -1655,7 +2078,12 @@ class _PersonPokeCard extends StatelessWidget {
           children: [
             _PersonAvatar(person: person, size: 56, ring: true),
             const SizedBox(height: 8),
-            Text(person.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+            Text(
+              person.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
+            ),
           ],
         ),
       ),
@@ -1664,7 +2092,11 @@ class _PersonPokeCard extends StatelessWidget {
 }
 
 class _PersonAvatar extends StatelessWidget {
-  const _PersonAvatar({required this.person, required this.size, this.ring = false});
+  const _PersonAvatar({
+    required this.person,
+    required this.size,
+    this.ring = false,
+  });
 
   final Person? person;
   final double size;
@@ -1672,7 +2104,9 @@ class _PersonAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = person == null ? const Color(0xFFE2E8F0) : _hexColor(person!.color).withValues(alpha: 0.16);
+    final bg = person == null
+        ? const Color(0xFFE2E8F0)
+        : _hexColor(person!.color).withValues(alpha: 0.16);
     final fg = person == null ? Colors.grey.shade600 : _hexColor(person!.color);
     final avatar = Container(
       width: size,
@@ -1697,7 +2131,13 @@ class _PersonAvatar extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: avatar,
     );
@@ -1719,7 +2159,11 @@ class _SurfaceCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 24, offset: const Offset(0, 10)),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 24,
+            offset: const Offset(0, 10),
+          ),
         ],
       ),
       child: child,
@@ -1727,7 +2171,11 @@ class _SurfaceCard extends StatelessWidget {
     if (onTap == null) {
       return card;
     }
-    return InkWell(onTap: onTap, borderRadius: BorderRadius.circular(24), child: card);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(24),
+      child: card,
+    );
   }
 }
 
@@ -1744,7 +2192,10 @@ class _MiniPill extends StatelessWidget {
         color: const Color(0xFFF3F7FA),
         borderRadius: BorderRadius.circular(999),
       ),
-      child: Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800)),
+      child: Text(
+        label,
+        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
+      ),
     );
   }
 }
@@ -1763,7 +2214,14 @@ class _StatusPill extends StatelessWidget {
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
       ),
-      child: Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: color)),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w800,
+          color: color,
+        ),
+      ),
     );
   }
 }
@@ -1783,7 +2241,10 @@ void _toast(BuildContext context, String message) {
   );
 }
 
-Future<void> showCreateGroupSheet(BuildContext context, AppController controller) async {
+Future<void> showCreateGroupSheet(
+  BuildContext context,
+  AppController controller,
+) async {
   final nameController = TextEditingController();
   const emojis = ['🏠', '🏖️', '🚗', '✈️', '🎉', '🍕'];
   String selectedEmoji = emojis.first;
@@ -1796,7 +2257,9 @@ Future<void> showCreateGroupSheet(BuildContext context, AppController controller
       return StatefulBuilder(
         builder: (context, setSheetState) {
           return Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             child: Container(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
               decoration: const BoxDecoration(
@@ -1811,11 +2274,17 @@ Future<void> showCreateGroupSheet(BuildContext context, AppController controller
                     child: Container(
                       width: 44,
                       height: 4,
-                      decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(999)),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 18),
-                  const Text('Create Group', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
+                  const Text(
+                    'Create Group',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+                  ),
                   const SizedBox(height: 10),
                   Wrap(
                     spacing: 10,
@@ -1825,7 +2294,8 @@ Future<void> showCreateGroupSheet(BuildContext context, AppController controller
                           (emoji) => ChoiceChip(
                             label: Text(emoji),
                             selected: selectedEmoji == emoji,
-                            onSelected: (_) => setSheetState(() => selectedEmoji = emoji),
+                            onSelected: (_) =>
+                                setSheetState(() => selectedEmoji = emoji),
                           ),
                         )
                         .toList(),
@@ -1852,7 +2322,9 @@ Future<void> showCreateGroupSheet(BuildContext context, AppController controller
                     style: FilledButton.styleFrom(
                       minimumSize: const Size.fromHeight(52),
                       backgroundColor: const Color(0xFF0F766E),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
                     ),
                     child: const Text('Create Group'),
                   ),
@@ -1878,7 +2350,11 @@ Future<void> showAddExpenseSheet(
   final categories = ['🍔', '🛒', '⚡', '🎬', '🔥', '☕', '🚇', '🎧'];
   bool isPersonal = personal;
   String selectedCategory = categories.first;
-  String? selectedGroupId = initialGroupId ?? (controller.state.groups.isEmpty ? null : controller.state.groups.first.id);
+  String? selectedGroupId =
+      initialGroupId ??
+      (controller.state.groups.isEmpty
+          ? null
+          : controller.state.groups.first.id);
   String selectedPayerId = controller.state.me;
   String selectedSplitMethod = 'equal'; // 'equal', 'amount', 'percentage'
   final Map<String, TextEditingController> splitControllers = {};
@@ -1891,8 +2367,14 @@ Future<void> showAddExpenseSheet(
     builder: (sheetContext) {
       return StatefulBuilder(
         builder: (context, setSheetState) {
-          final group = selectedGroupId == null ? null : controller.groupById(selectedGroupId!);
-          final payerOptions = isPersonal ? [controller.state.me] : (group?.members.isNotEmpty == true ? group!.members : [controller.state.me]);
+          final group = selectedGroupId == null
+              ? null
+              : controller.groupById(selectedGroupId!);
+          final payerOptions = isPersonal
+              ? [controller.state.me]
+              : (group?.members.isNotEmpty == true
+                    ? group!.members
+                    : [controller.state.me]);
           if (!payerOptions.contains(selectedPayerId)) {
             selectedPayerId = payerOptions.first;
           }
@@ -1910,7 +2392,9 @@ Future<void> showAddExpenseSheet(
           }
 
           return Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             child: Container(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
               decoration: const BoxDecoration(
@@ -1926,11 +2410,20 @@ Future<void> showAddExpenseSheet(
                       child: Container(
                         width: 44,
                         height: 4,
-                        decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(999)),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 18),
-                    const Text('Add Expense', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
+                    const Text(
+                      'Add Expense',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
                     const SizedBox(height: 12),
                     SwitchListTile.adaptive(
                       contentPadding: EdgeInsets.zero,
@@ -1941,9 +2434,12 @@ Future<void> showAddExpenseSheet(
                         if (isPersonal) {
                           selectedGroupId = null;
                           selectedPayerId = controller.state.me;
-                        } else if (selectedGroupId == null && controller.state.groups.isNotEmpty) {
+                        } else if (selectedGroupId == null &&
+                            controller.state.groups.isNotEmpty) {
                           selectedGroupId = controller.state.groups.first.id;
-                          final firstGroup = controller.groupById(selectedGroupId!);
+                          final firstGroup = controller.groupById(
+                            selectedGroupId!,
+                          );
                           if (firstGroup != null) {
                             selectedParticipants = {...firstGroup.members};
                           }
@@ -1963,7 +2459,9 @@ Future<void> showAddExpenseSheet(
                     const SizedBox(height: 12),
                     TextField(
                       controller: amountController,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                       decoration: const InputDecoration(
                         labelText: 'Amount',
                         border: OutlineInputBorder(),
@@ -1972,7 +2470,10 @@ Future<void> showAddExpenseSheet(
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
                       initialValue: selectedCategory,
-                      decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'Category'),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Category',
+                      ),
                       items: categories
                           .map(
                             (emoji) => DropdownMenuItem<String>(
@@ -1992,7 +2493,10 @@ Future<void> showAddExpenseSheet(
                     if (!isPersonal)
                       DropdownButtonFormField<String>(
                         initialValue: selectedGroupId,
-                        decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'Group'),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Group',
+                        ),
                         items: controller.state.groups
                             .map(
                               (group) => DropdownMenuItem<String>(
@@ -2010,11 +2514,16 @@ Future<void> showAddExpenseSheet(
                                 setSheetState(() {
                                   selectedGroupId = value;
                                   final nextGroup = controller.groupById(value);
-                                  if (nextGroup != null && !nextGroup.members.contains(selectedPayerId)) {
+                                  if (nextGroup != null &&
+                                      !nextGroup.members.contains(
+                                        selectedPayerId,
+                                      )) {
                                     selectedPayerId = nextGroup.members.first;
                                   }
                                   // Reset selected participants to new group members
-                                  selectedParticipants = {...nextGroup!.members};
+                                  selectedParticipants = {
+                                    ...nextGroup!.members,
+                                  };
                                   // Clear split controllers for new participants
                                   splitControllers.clear();
                                 });
@@ -2024,12 +2533,18 @@ Future<void> showAddExpenseSheet(
                     if (!isPersonal)
                       DropdownButtonFormField<String>(
                         initialValue: selectedPayerId,
-                        decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'Paid by'),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Paid by',
+                        ),
                         items: payerOptions
                             .map(
                               (personId) => DropdownMenuItem<String>(
                                 value: personId,
-                                child: Text(controller.personById(personId)?.name ?? personId),
+                                child: Text(
+                                  controller.personById(personId)?.name ??
+                                      personId,
+                                ),
                               ),
                             )
                             .toList(),
@@ -2041,7 +2556,14 @@ Future<void> showAddExpenseSheet(
                         },
                       ),
                     if (!isPersonal) const SizedBox(height: 12),
-                    if (!isPersonal) const Text('Split with', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    if (!isPersonal)
+                      const Text(
+                        'Split with',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     if (!isPersonal) const SizedBox(height: 8),
                     if (!isPersonal)
                       Container(
@@ -2074,7 +2596,14 @@ Future<void> showAddExpenseSheet(
                         ),
                       ),
                     if (!isPersonal) const SizedBox(height: 12),
-                    if (!isPersonal) const Text('Split method', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    if (!isPersonal)
+                      const Text(
+                        'Split method',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     if (!isPersonal) const SizedBox(height: 8),
                     if (!isPersonal)
                       Wrap(
@@ -2083,21 +2612,28 @@ Future<void> showAddExpenseSheet(
                           ChoiceChip(
                             label: const Text('Equally'),
                             selected: selectedSplitMethod == 'equal',
-                            onSelected: (selected) => setSheetState(() => selectedSplitMethod = 'equal'),
+                            onSelected: (selected) => setSheetState(
+                              () => selectedSplitMethod = 'equal',
+                            ),
                           ),
                           ChoiceChip(
                             label: const Text('By Amount'),
                             selected: selectedSplitMethod == 'amount',
-                            onSelected: (selected) => setSheetState(() => selectedSplitMethod = 'amount'),
+                            onSelected: (selected) => setSheetState(
+                              () => selectedSplitMethod = 'amount',
+                            ),
                           ),
                           ChoiceChip(
                             label: const Text('By Percentage'),
                             selected: selectedSplitMethod == 'percentage',
-                            onSelected: (selected) => setSheetState(() => selectedSplitMethod = 'percentage'),
+                            onSelected: (selected) => setSheetState(
+                              () => selectedSplitMethod = 'percentage',
+                            ),
                           ),
                         ],
                       ),
-                    if (!isPersonal && selectedSplitMethod != 'equal') const SizedBox(height: 12),
+                    if (!isPersonal && selectedSplitMethod != 'equal')
+                      const SizedBox(height: 12),
                     if (!isPersonal && selectedSplitMethod != 'equal')
                       Container(
                         padding: const EdgeInsets.all(12),
@@ -2109,20 +2645,34 @@ Future<void> showAddExpenseSheet(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              selectedSplitMethod == 'amount' ? 'Amount for each person' : 'Percentage for each person',
-                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+                              selectedSplitMethod == 'amount'
+                                  ? 'Amount for each person'
+                                  : 'Percentage for each person',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey,
+                              ),
                             ),
                             const SizedBox(height: 8),
                             ...selectedParticipants.map((participantId) {
-                              final person = controller.personById(participantId);
-                              final label = selectedSplitMethod == 'amount' ? '\$' : '%';
+                              final person = controller.personById(
+                                participantId,
+                              );
+                              final label = selectedSplitMethod == 'amount'
+                                  ? '\$'
+                                  : '%';
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 8),
                                 child: TextField(
                                   controller: splitControllers[participantId],
-                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                        decimal: true,
+                                      ),
                                   decoration: InputDecoration(
-                                    labelText: '${person?.name ?? participantId} $label',
+                                    labelText:
+                                        '${person?.name ?? participantId} $label',
                                     isDense: true,
                                     border: const OutlineInputBorder(),
                                   ),
@@ -2149,7 +2699,8 @@ Future<void> showAddExpenseSheet(
                             (emoji) => ChoiceChip(
                               label: Text(emoji),
                               selected: selectedCategory == emoji,
-                              onSelected: (_) => setSheetState(() => selectedCategory = emoji),
+                              onSelected: (_) =>
+                                  setSheetState(() => selectedCategory = emoji),
                             ),
                           )
                           .toList(),
@@ -2158,19 +2709,27 @@ Future<void> showAddExpenseSheet(
                     FilledButton(
                       onPressed: () {
                         final title = titleController.text.trim();
-                        final amount = double.tryParse(amountController.text.trim());
+                        final amount = double.tryParse(
+                          amountController.text.trim(),
+                        );
                         if (title.isEmpty || amount == null || amount <= 0) {
                           return;
                         }
 
                         if (!isPersonal && selectedParticipants.isEmpty) {
                           ScaffoldMessenger.of(sheetContext).showSnackBar(
-                            const SnackBar(content: Text('Please select at least one participant')),
+                            const SnackBar(
+                              content: Text(
+                                'Please select at least one participant',
+                              ),
+                            ),
                           );
                           return;
                         }
 
-                        final participantsList = isPersonal ? [controller.state.me] : selectedParticipants.toList();
+                        final participantsList = isPersonal
+                            ? [controller.state.me]
+                            : selectedParticipants.toList();
 
                         // Validate split inputs
                         Map<String, double>? splits;
@@ -2178,10 +2737,17 @@ Future<void> showAddExpenseSheet(
                           splits = {};
                           double totalValue = 0;
                           for (final participantId in participantsList) {
-                            final value = double.tryParse(splitControllers[participantId]?.text.trim() ?? '');
+                            final value = double.tryParse(
+                              splitControllers[participantId]?.text.trim() ??
+                                  '',
+                            );
                             if (value == null || value < 0) {
                               ScaffoldMessenger.of(sheetContext).showSnackBar(
-                                const SnackBar(content: Text('Please enter valid split values')),
+                                const SnackBar(
+                                  content: Text(
+                                    'Please enter valid split values',
+                                  ),
+                                ),
                               );
                               return;
                             }
@@ -2193,19 +2759,28 @@ Future<void> showAddExpenseSheet(
                           if (selectedSplitMethod == 'amount') {
                             if ((totalValue - amount).abs() > 0.01) {
                               ScaffoldMessenger.of(sheetContext).showSnackBar(
-                                SnackBar(content: Text('Split amounts must total \$$amount')),
+                                SnackBar(
+                                  content: Text(
+                                    'Split amounts must total \$$amount',
+                                  ),
+                                ),
                               );
                               return;
                             }
                           } else if (selectedSplitMethod == 'percentage') {
                             if ((totalValue - 100).abs() > 0.01) {
                               ScaffoldMessenger.of(sheetContext).showSnackBar(
-                                const SnackBar(content: Text('Percentages must total 100%')),
+                                const SnackBar(
+                                  content: Text('Percentages must total 100%'),
+                                ),
                               );
                               return;
                             }
                             // Convert percentages to amounts
-                            splits = splits.map((key, value) => MapEntry(key, (value / 100) * amount));
+                            splits = splits.map(
+                              (key, value) =>
+                                  MapEntry(key, (value / 100) * amount),
+                            );
                           }
                         }
 
@@ -2214,11 +2789,15 @@ Future<void> showAddExpenseSheet(
                         controller.addExpense(
                           title: title,
                           amount: amount,
-                          paidBy: isPersonal ? controller.state.me : selectedPayerId,
+                          paidBy: isPersonal
+                              ? controller.state.me
+                              : selectedPayerId,
                           participants: participantsList,
                           category: selectedCategory,
                           groupId: groupToUse,
-                          note: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+                          note: noteController.text.trim().isEmpty
+                              ? null
+                              : noteController.text.trim(),
                           splitMethod: selectedSplitMethod,
                           splits: splits ?? {},
                           personal: isPersonal,
@@ -2229,7 +2808,9 @@ Future<void> showAddExpenseSheet(
                       style: FilledButton.styleFrom(
                         minimumSize: const Size.fromHeight(52),
                         backgroundColor: const Color(0xFF0F766E),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
                       ),
                       child: const Text('Save Expense'),
                     ),
@@ -2244,7 +2825,11 @@ Future<void> showAddExpenseSheet(
   );
 }
 
-Future<void> showManageMembersSheet(BuildContext context, AppController controller, Group group) async {
+Future<void> showManageMembersSheet(
+  BuildContext context,
+  AppController controller,
+  Group group,
+) async {
   final allPeople = controller.state.people;
   final selected = <String>{...group.members};
 
@@ -2253,66 +2838,204 @@ Future<void> showManageMembersSheet(BuildContext context, AppController controll
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (sheetContext) {
-      return StatefulBuilder(builder: (context, setSheetState) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      return StatefulBuilder(
+        builder: (context, setSheetState) {
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(width: 44, height: 4, decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(999))),
-                ),
-                const SizedBox(height: 18),
-                Text('Manage Members — ${group.name}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
-                const SizedBox(height: 12),
-                Flexible(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: allPeople.length,
-                    separatorBuilder: (_, _) => const Divider(height: 1),
-                    itemBuilder: (context, index) {
-                      final person = allPeople[index];
-                      final isMember = selected.contains(person.id);
-                      return CheckboxListTile(
-                        value: isMember,
-                        onChanged: (value) {
-                          setSheetState(() {
-                            if (value == true) {
-                              selected.add(person.id);
-                              controller.addMemberToGroup(group.id, person.id);
-                              _toast(context, 'Added ${person.name} to ${group.name}.');
-                            } else {
-                              selected.remove(person.id);
-                              controller.removeMemberFromGroup(group.id, person.id);
-                              _toast(context, 'Removed ${person.name} from ${group.name}.');
-                            }
-                          });
-                        },
-                        title: Text(person.name),
-                        secondary: _PersonAvatar(person: person, size: 36),
-                      );
-                    },
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 44,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                FilledButton(
-                  onPressed: () => Navigator.of(sheetContext).pop(),
-                  style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48), backgroundColor: const Color(0xFF0F766E)),
-                  child: const Text('Done'),
-                ),
-              ],
+                  const SizedBox(height: 18),
+                  Text(
+                    'Manage Members — ${group.name}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Flexible(
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: allPeople.length,
+                      separatorBuilder: (_, _) => const Divider(height: 1),
+                      itemBuilder: (context, index) {
+                        final person = allPeople[index];
+                        final isMember = selected.contains(person.id);
+                        return CheckboxListTile(
+                          value: isMember,
+                          onChanged: (value) {
+                            setSheetState(() {
+                              if (value == true) {
+                                selected.add(person.id);
+                                controller.addMemberToGroup(
+                                  group.id,
+                                  person.id,
+                                );
+                                _toast(
+                                  context,
+                                  'Added ${person.name} to ${group.name}.',
+                                );
+                              } else {
+                                selected.remove(person.id);
+                                controller.removeMemberFromGroup(
+                                  group.id,
+                                  person.id,
+                                );
+                                _toast(
+                                  context,
+                                  'Removed ${person.name} from ${group.name}.',
+                                );
+                              }
+                            });
+                          },
+                          title: Text(person.name),
+                          secondary: _PersonAvatar(person: person, size: 36),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton(
+                    onPressed: () => Navigator.of(sheetContext).pop(),
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size.fromHeight(48),
+                      backgroundColor: const Color(0xFF0F766E),
+                    ),
+                    child: const Text('Done'),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
     },
   );
+}
+
+class _SettlementSection extends StatelessWidget {
+  const _SettlementSection({
+    required this.groupId,
+    required this.controller,
+    required this.group,
+  });
+
+  final String groupId;
+  final AppController controller;
+  final Group group;
+
+  @override
+  Widget build(BuildContext context) {
+    final settlements = controller.computeGroupSettlements(groupId);
+    
+    // Calculate who owes what for this user
+    final mySettlements = settlements[controller.state.me] ?? [];
+    
+    if (mySettlements.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.green.shade50,
+          border: Border.all(color: Colors.green.shade200),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.check_circle, color: Colors.green),
+            SizedBox(width: 12),
+            Text(
+              'All settled! No pending payments.',
+              style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      );
+    }
+
+    double totalOwed = 0;
+    for (var payment in mySettlements) {
+      totalOwed += (payment['amount'] as num).toDouble();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const _SectionLabel(text: 'SETTLEMENT SUMMARY'),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.orange.shade50,
+            border: Border.all(color: Colors.orange.shade200),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'You owe: ${money(totalOwed)}',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.orange.shade900,
+                ),
+              ),
+              const SizedBox(height: 12),
+              ...mySettlements.map((payment) {
+                final toId = payment['to'] as String;
+                final amount = (payment['amount'] as num).toDouble();
+                final toPerson = controller.state.people
+                    .firstWhere(
+                      (p) => p.id == toId,
+                      orElse: () => Person(id: toId, name: 'Unknown', avatar: '👤', color: '#999999'),
+                    );
+                
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Pay ${toPerson.name}',
+                        style: TextStyle(fontSize: 14, color: Colors.orange.shade800),
+                      ),
+                      Text(
+                        money(amount),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.orange.shade800,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }

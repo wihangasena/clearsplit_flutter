@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../app_state.dart';
@@ -18,25 +19,45 @@ class BackendAuthException extends BackendClientException {
 }
 
 class BackendSession {
-  const BackendSession({required this.account, required this.state});
+  const BackendSession({
+    required this.account,
+    required this.state,
+    this.accessToken,
+  });
 
   final DemoAccount account;
   final AppData state;
+  final String? accessToken;
 }
 
 class BackendClient {
-  BackendClient({Uri? baseUri}) : _baseUri = baseUri ?? Uri.parse('http://127.0.0.1:8081');
+  BackendClient({Uri? baseUri}) : _baseUri = baseUri ?? _defaultBaseUri();
 
   final Uri _baseUri;
 
   Uri _resolve(String path) => _baseUri.resolve(path);
 
-  Future<BackendSession> signIn({required String email, required String password}) async {
-    final response = await http.post(
-      _resolve('/auth/login'),
-      headers: const {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
-    );
+  Future<BackendSession> signIn({
+    required String email,
+    required String password,
+  }) async {
+    return _signInWithBackend(email: email, password: password);
+  }
+
+  Future<BackendSession> _signInWithBackend({
+    required String email,
+    required String password,
+  }) async {
+    late final http.Response response;
+    try {
+      response = await http.post(
+        _resolve('/auth/login'),
+        headers: const {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+    } catch (_) {
+      throw BackendClientException(_connectionMessage);
+    }
 
     final payload = _decodeBody(response.body);
     if (response.statusCode != 200) {
@@ -56,11 +77,16 @@ class BackendClient {
         avatar: payload['account']['avatar'] as String,
         color: payload['account']['color'] as String,
       ),
-      state: AppData.fromJson(Map<String, dynamic>.from(payload['state'] as Map)),
+      state: AppData.fromJson(
+        Map<String, dynamic>.from(payload['state'] as Map),
+      ),
     );
   }
 
-  Future<void> saveState({required String userId, required AppData state}) async {
+  Future<void> saveState({
+    required String userId,
+    required AppData state,
+  }) async {
     final response = await http.put(
       _resolve('/state/$userId'),
       headers: const {'Content-Type': 'application/json'},
@@ -69,7 +95,8 @@ class BackendClient {
 
     if (response.statusCode >= 400) {
       final payload = _decodeBody(response.body);
-      final message = (payload['message'] as String?) ?? 'Unable to save state.';
+      final message =
+          (payload['message'] as String?) ?? 'Unable to save state.';
       throw BackendClientException(message);
     }
   }
@@ -92,7 +119,8 @@ class BackendClient {
 
     final payload = _decodeBody(response.body);
     if (response.statusCode >= 400) {
-      final message = (payload['message'] as String?) ?? 'Unable to update profile.';
+      final message =
+          (payload['message'] as String?) ?? 'Unable to update profile.';
       throw BackendClientException(message);
     }
 
@@ -108,5 +136,22 @@ class BackendClient {
       return decoded;
     }
     return Map<String, dynamic>.from(decoded as Map);
+  }
+
+  String get _connectionMessage {
+    return 'Unable to connect to the backend at $_baseUri. Start the backend with `npm run backend`, or set BACKEND_BASE_URL to the running API URL.';
+  }
+
+  static Uri _defaultBaseUri() {
+    const configured = String.fromEnvironment('BACKEND_BASE_URL');
+    if (configured.isNotEmpty) {
+      return Uri.parse(configured);
+    }
+
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      return Uri.parse('http://10.0.2.2:8081');
+    }
+
+    return Uri.parse('http://127.0.0.1:8081');
   }
 }

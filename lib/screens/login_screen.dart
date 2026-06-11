@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../app_state.dart';
@@ -30,6 +32,11 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordController.text = account.password;
       _error = null;
     });
+  }
+
+  Future<void> _prefillAndSubmit(DemoAccount account) async {
+    _prefill(account);
+    await _submit();
   }
 
   Future<void> _submit() async {
@@ -157,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.only(bottom: 10),
             child: _DemoAccountTile(
               account: account,
-              onTap: () => _prefill(account),
+              onTap: () => unawaited(_prefillAndSubmit(account)),
             ),
           ),
         ),
@@ -251,28 +258,6 @@ class _DemoAccountTile extends StatelessWidget {
             const Icon(Icons.arrow_forward_ios_rounded, size: 16),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _FeaturePill extends StatelessWidget {
-  const _FeaturePill({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white24),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12),
       ),
     );
   }

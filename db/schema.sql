@@ -96,16 +96,16 @@ CREATE TABLE IF NOT EXISTS public.grocery_items (
 );
 
 -- Create indexes for performance
-CREATE INDEX idx_people_user_id ON public.people(user_id);
-CREATE INDEX idx_groups_user_id ON public.groups(user_id);
-CREATE INDEX idx_group_members_group_id ON public.group_members(group_id);
-CREATE INDEX idx_group_members_person_id ON public.group_members(person_id);
-CREATE INDEX idx_expenses_user_id ON public.expenses(user_id);
-CREATE INDEX idx_expenses_group_id ON public.expenses(group_id);
-CREATE INDEX idx_expenses_paid_by ON public.expenses(paid_by);
-CREATE INDEX idx_expense_participants_expense_id ON public.expense_participants(expense_id);
-CREATE INDEX idx_expense_participants_person_id ON public.expense_participants(person_id);
-CREATE INDEX idx_grocery_items_group_id ON public.grocery_items(group_id);
+CREATE INDEX IF NOT EXISTS idx_people_user_id ON public.people(user_id);
+CREATE INDEX IF NOT EXISTS idx_groups_user_id ON public.groups(user_id);
+CREATE INDEX IF NOT EXISTS idx_group_members_group_id ON public.group_members(group_id);
+CREATE INDEX IF NOT EXISTS idx_group_members_person_id ON public.group_members(person_id);
+CREATE INDEX IF NOT EXISTS idx_expenses_user_id ON public.expenses(user_id);
+CREATE INDEX IF NOT EXISTS idx_expenses_group_id ON public.expenses(group_id);
+CREATE INDEX IF NOT EXISTS idx_expenses_paid_by ON public.expenses(paid_by);
+CREATE INDEX IF NOT EXISTS idx_expense_participants_expense_id ON public.expense_participants(expense_id);
+CREATE INDEX IF NOT EXISTS idx_expense_participants_person_id ON public.expense_participants(person_id);
+CREATE INDEX IF NOT EXISTS idx_grocery_items_group_id ON public.grocery_items(group_id);
 
 -- Enable RLS (Row Level Security)
 ALTER TABLE public.app_states ENABLE ROW LEVEL SECURITY;
@@ -118,49 +118,125 @@ ALTER TABLE public.expense_participants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.grocery_items ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for users
-CREATE POLICY "Backend can manage app states" ON public.app_states
-  FOR ALL USING (true) WITH CHECK (true);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'app_states' AND policyname = 'Backend can manage app states'
+  ) THEN
+    CREATE POLICY "Backend can manage app states" ON public.app_states
+      FOR ALL USING (true) WITH CHECK (true);
+  END IF;
 
-CREATE POLICY "Users can read their own data" ON public.users
-  FOR SELECT USING (auth.uid() = id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'users' AND policyname = 'Users can read their own data'
+  ) THEN
+    CREATE POLICY "Users can read their own data" ON public.users
+      FOR SELECT USING (auth.uid() = id);
+  END IF;
+END
+$$;
 
--- RLS Policies for people
-CREATE POLICY "Users can read their people" ON public.people
-  FOR SELECT USING (auth.uid() = user_id);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'people' AND policyname = 'Users can read their people'
+  ) THEN
+    CREATE POLICY "Users can read their people" ON public.people
+      FOR SELECT USING (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can insert their people" ON public.people
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'people' AND policyname = 'Users can insert their people'
+  ) THEN
+    CREATE POLICY "Users can insert their people" ON public.people
+      FOR INSERT WITH CHECK (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can update their people" ON public.people
-  FOR UPDATE USING (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'people' AND policyname = 'Users can update their people'
+  ) THEN
+    CREATE POLICY "Users can update their people" ON public.people
+      FOR UPDATE USING (auth.uid() = user_id);
+  END IF;
+END
+$$;
 
--- RLS Policies for groups
-CREATE POLICY "Users can read their groups" ON public.groups
-  FOR SELECT USING (auth.uid() = user_id);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'groups' AND policyname = 'Users can read their groups'
+  ) THEN
+    CREATE POLICY "Users can read their groups" ON public.groups
+      FOR SELECT USING (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can insert groups" ON public.groups
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'groups' AND policyname = 'Users can insert groups'
+  ) THEN
+    CREATE POLICY "Users can insert groups" ON public.groups
+      FOR INSERT WITH CHECK (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can update their groups" ON public.groups
-  FOR UPDATE USING (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'groups' AND policyname = 'Users can update their groups'
+  ) THEN
+    CREATE POLICY "Users can update their groups" ON public.groups
+      FOR UPDATE USING (auth.uid() = user_id);
+  END IF;
+END
+$$;
 
--- RLS Policies for expenses
-CREATE POLICY "Users can read their expenses" ON public.expenses
-  FOR SELECT USING (auth.uid() = user_id);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'expenses' AND policyname = 'Users can read their expenses'
+  ) THEN
+    CREATE POLICY "Users can read their expenses" ON public.expenses
+      FOR SELECT USING (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can insert expenses" ON public.expenses
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'expenses' AND policyname = 'Users can insert expenses'
+  ) THEN
+    CREATE POLICY "Users can insert expenses" ON public.expenses
+      FOR INSERT WITH CHECK (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can update their expenses" ON public.expenses
-  FOR UPDATE USING (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'expenses' AND policyname = 'Users can update their expenses'
+  ) THEN
+    CREATE POLICY "Users can update their expenses" ON public.expenses
+      FOR UPDATE USING (auth.uid() = user_id);
+  END IF;
+END
+$$;
 
--- RLS Policies for grocery items
-CREATE POLICY "Users can read group grocery items" ON public.grocery_items
-  FOR SELECT USING (
-    EXISTS (
-      SELECT 1 FROM public.groups WHERE id = group_id AND user_id = auth.uid()
-    )
-  );
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'grocery_items' AND policyname = 'Users can read group grocery items'
+  ) THEN
+    CREATE POLICY "Users can read group grocery items" ON public.grocery_items
+      FOR SELECT USING (
+        EXISTS (
+          SELECT 1 FROM public.groups WHERE id = group_id AND user_id = auth.uid()
+        )
+      );
+  END IF;
+END
+$$;
 
 -- Trigger to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -171,20 +247,26 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS update_users_updated_at ON public.users;
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON public.users
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_app_states_updated_at ON public.app_states;
 CREATE TRIGGER update_app_states_updated_at BEFORE UPDATE ON public.app_states
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_people_updated_at ON public.people;
 CREATE TRIGGER update_people_updated_at BEFORE UPDATE ON public.people
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_groups_updated_at ON public.groups;
 CREATE TRIGGER update_groups_updated_at BEFORE UPDATE ON public.groups
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_expenses_updated_at ON public.expenses;
 CREATE TRIGGER update_expenses_updated_at BEFORE UPDATE ON public.expenses
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_grocery_items_updated_at ON public.grocery_items;
 CREATE TRIGGER update_grocery_items_updated_at BEFORE UPDATE ON public.grocery_items
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

@@ -3,797 +3,17 @@
     "me": "user-jordan",
     "people": [
       {
-        "id": "user-jordan",
-        "name": "Jordan",
-        "avatar": "🧔",
-        "color": "#EF4444"
-      },
-      {
-        "id": "alex",
-        "name": "Alex",
-        "avatar": "🧑",
-        "color": "#10B981"
-      },
-      {
-        "id": "maya",
-        "name": "Maya",
-        "avatar": "👩",
-        "color": "#8B5CF6"
-      },
-      {
-        "id": "jordan",
-        "name": "Jordan",
-        "avatar": "🧔",
-        "color": "#EF4444"
-      },
-      {
-        "id": "chloe",
-        "name": "Chloe",
-        "avatar": "👱‍♀️",
-        "color": "#F59E0B"
-      },
-      {
-        "id": "sam",
-        "name": "Sam",
-        "avatar": "👨",
-        "color": "#0EA5E9"
-      }
-    ],
-    "groups": [
-      {
-        "id": "beach",
-        "name": "The Beach House",
-        "emoji": "🏖️",
-        "members": [
-          "user-jordan",
-          "alex",
-          "maya",
-          "chloe"
-        ]
-      },
-      {
-        "id": "apt",
-        "name": "The Apartment Crew",
-        "emoji": "🏠",
-        "members": [
-          "user-jordan",
-          "alex",
-          "jordan",
-          "sam"
-        ]
-      },
-      {
-        "id": "trip",
-        "name": "Road Trip 2026",
-        "emoji": "🚗",
-        "members": [
-          "user-jordan",
-          "maya",
-          "sam"
-        ]
-      }
-    ],
-    "expenses": [
-      {
-<<<<<<< Updated upstream
-        "id": "e1781102472148000",
-        "title": "dinner",
-        "amount": 500,
-        "paidBy": "user-jordan",
-        "participants": [
-          "user-jordan",
-          "maya",
-          "sam"
-        ],
-        "groupId": "trip",
-        "category": "🍔",
-        "date": 1781102472148,
-        "note": "It is yummy one",
-=======
-        "id": "e1781017041530000",
-        "title": "lunch trip",
-        "amount": 600,
-        "paidBy": "user-jordan",
-        "participants": [
-          "user-jordan",
-          "alex",
-          "jordan",
-          "sam"
-        ],
-        "groupId": "apt",
-        "category": "🍔",
-        "date": 1781017041530,
-        "note": null,
->>>>>>> Stashed changes
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": false
-      },
-      {
-        "id": "e1",
-        "title": "Five Guys Dinner",
-        "amount": 62.5,
-        "paidBy": "user-jordan",
-        "participants": [
-          "user-jordan",
-          "alex",
-          "maya",
-          "jordan",
-          "sam"
-        ],
-        "groupId": "apt",
-        "category": "🍔",
-        "date": 1779706123841,
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": false
-      },
-      {
-        "id": "e2",
-        "title": "Grocery Run",
-        "amount": 90,
-        "paidBy": "alex",
-        "participants": [
-          "user-jordan",
-          "alex"
-        ],
-        "groupId": "apt",
-        "category": "🛒",
-        "date": 1779616123841,
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": false
-      },
-      {
-        "id": "e3",
-        "title": "Utilities - Oct",
-        "amount": 240,
-        "paidBy": "user-jordan",
-        "participants": [
-          "user-jordan",
-          "alex",
-          "jordan",
-          "sam"
-        ],
-        "groupId": "apt",
-        "category": "⚡",
-        "date": 1779536923841,
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": false
-      },
-      {
-        "id": "e4",
-        "title": "Cinema Tickets",
-        "amount": 48,
-        "paidBy": "user-jordan",
-        "participants": [
-          "user-jordan",
-          "maya"
-        ],
-        "groupId": "trip",
-        "category": "🎬",
-        "date": 1779277723841,
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": false
-      },
-      {
-        "id": "e5",
-        "title": "Beach BBQ",
-        "amount": 120,
-        "paidBy": "chloe",
-        "participants": [
-          "user-jordan",
-          "alex",
-          "maya",
-          "chloe"
-        ],
-        "groupId": "beach",
-        "category": "🔥",
-        "date": 1778932123841,
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": true,
-        "personal": false
-      },
-      {
-        "id": "p1",
-        "title": "Morning Coffee",
-        "amount": 4.75,
-        "paidBy": "user-jordan",
-        "participants": [
-          "user-jordan"
-        ],
-        "groupId": null,
-        "category": "☕",
-        "date": 1779702523841,
-        "note": "Food",
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": true
-      },
-      {
-        "id": "p2",
-        "title": "Metro Card",
-        "amount": 30,
-        "paidBy": "user-jordan",
-        "participants": [
-          "user-jordan"
-        ],
-        "groupId": null,
-        "category": "🚇",
-        "date": 1779623323841,
-        "note": "Transport",
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": true
-      },
-      {
-        "id": "p3",
-        "title": "Spotify",
-        "amount": 10.99,
-        "paidBy": "user-jordan",
-        "participants": [
-          "user-jordan"
-        ],
-        "groupId": null,
-        "category": "🎧",
-        "date": 1779450523841,
-        "note": "Bills",
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": true
-      },
-      {
-        "id": "p4",
-        "title": "Gym Membership",
-        "amount": 45,
-        "paidBy": "user-jordan",
-        "participants": [
-          "user-jordan"
-        ],
-        "groupId": null,
-        "category": "💪",
-        "date": 1779191323841,
-        "note": "Health",
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": true
-      }
-    ],
-    "grocery": [
-      {
-        "id": "g1",
-        "groupId": "apt",
-        "name": "Almond Milk",
-        "tag": "DAIRY FREE",
-        "qty": "2 cartons",
-        "claimedBy": "alex",
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g2",
-        "groupId": "apt",
-        "name": "Avocados",
-        "tag": "PRODUCE",
-        "qty": "Pack of 4",
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g3",
-        "groupId": "apt",
-        "name": "Fresh Pasta",
-        "tag": null,
-        "qty": null,
-        "claimedBy": null,
-        "boughtBy": "alex",
-        "price": 12.5,
-        "done": true
-      },
-      {
-        "id": "g4",
-        "groupId": "apt",
-        "name": "Greek Yogurt",
-        "tag": null,
-        "qty": null,
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g5",
-        "groupId": "apt",
-        "name": "Eggs",
-        "tag": null,
-        "qty": "Dozen",
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g6",
-        "groupId": "apt",
-        "name": "Bread",
-        "tag": "BAKERY",
-        "qty": null,
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      }
-    ]
-  },
-<<<<<<< Updated upstream
-  "user-you": {
-    "me": "user-you",
-    "people": [
-      {
         "id": "user-you",
         "name": "You",
-        "avatar": "🙂",
-        "color": "#2563EB"
-=======
-  "user-alex": {
-    "me": "user-alex",
-    "people": [
+        "avatar": "😊",
+        "color": "#FF6B6B"
+      },
       {
         "id": "user-alex",
         "name": "Alex",
         "avatar": "🧑",
         "color": "#10B981"
->>>>>>> Stashed changes
       },
-      {
-        "id": "alex",
-        "name": "Alex",
-        "avatar": "🧑",
-        "color": "#10B981"
-      },
-      {
-        "id": "maya",
-        "name": "Maya",
-        "avatar": "👩",
-        "color": "#8B5CF6"
-      },
-      {
-        "id": "jordan",
-        "name": "Jordan",
-        "avatar": "🧔",
-        "color": "#EF4444"
-      },
-      {
-        "id": "chloe",
-        "name": "Chloe",
-        "avatar": "👱‍♀️",
-        "color": "#F59E0B"
-      },
-      {
-        "id": "sam",
-        "name": "Sam",
-        "avatar": "👨",
-        "color": "#0EA5E9"
-      }
-    ],
-    "groups": [
-      {
-        "id": "beach",
-        "name": "The Beach House",
-        "emoji": "🏖️",
-        "members": [
-<<<<<<< Updated upstream
-          "user-you",
-=======
-          "user-alex",
->>>>>>> Stashed changes
-          "alex",
-          "maya",
-          "chloe"
-        ]
-      },
-      {
-        "id": "apt",
-        "name": "The Apartment Crew",
-        "emoji": "🏠",
-        "members": [
-<<<<<<< Updated upstream
-          "user-you",
-=======
-          "user-alex",
->>>>>>> Stashed changes
-          "alex",
-          "jordan",
-          "sam"
-        ]
-      },
-      {
-        "id": "trip",
-        "name": "Road Trip 2026",
-        "emoji": "🚗",
-        "members": [
-<<<<<<< Updated upstream
-          "user-you",
-=======
-          "user-alex",
->>>>>>> Stashed changes
-          "maya",
-          "sam"
-        ]
-      }
-    ],
-    "expenses": [
-      {
-<<<<<<< Updated upstream
-        "id": "e1781103679835000",
-        "title": "Bread",
-        "amount": 250,
-        "paidBy": "user-you",
-        "participants": [
-          "user-you",
-          "alex",
-          "maya",
-          "chloe"
-        ],
-        "groupId": "beach",
-        "category": "🍔",
-        "date": 1781103679836,
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": false
-      },
-      {
-        "id": "e1",
-        "title": "Five Guys Dinner",
-        "amount": 62.5,
-        "paidBy": "user-you",
-        "participants": [
-          "user-you",
-=======
-        "id": "e1",
-        "title": "Five Guys Dinner",
-        "amount": 62.5,
-        "paidBy": "user-alex",
-        "participants": [
-          "user-alex",
->>>>>>> Stashed changes
-          "alex",
-          "maya",
-          "jordan",
-          "sam"
-        ],
-        "groupId": "apt",
-        "category": "🍔",
-<<<<<<< Updated upstream
-        "date": 1781098802046,
-=======
-        "date": 1781012058628,
->>>>>>> Stashed changes
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": false
-      },
-      {
-        "id": "e2",
-        "title": "Grocery Run",
-        "amount": 90,
-        "paidBy": "alex",
-        "participants": [
-<<<<<<< Updated upstream
-          "user-you",
-=======
-          "user-alex",
->>>>>>> Stashed changes
-          "alex"
-        ],
-        "groupId": "apt",
-        "category": "🛒",
-<<<<<<< Updated upstream
-        "date": 1781008802046,
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-=======
-        "date": 1780922058628,
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": true,
->>>>>>> Stashed changes
-        "personal": false
-      },
-      {
-        "id": "e3",
-        "title": "Utilities - Oct",
-        "amount": 240,
-<<<<<<< Updated upstream
-        "paidBy": "user-you",
-        "participants": [
-          "user-you",
-=======
-        "paidBy": "user-alex",
-        "participants": [
-          "user-alex",
->>>>>>> Stashed changes
-          "alex",
-          "jordan",
-          "sam"
-        ],
-        "groupId": "apt",
-        "category": "⚡",
-<<<<<<< Updated upstream
-        "date": 1780929602046,
-=======
-        "date": 1780842858628,
->>>>>>> Stashed changes
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": false
-      },
-      {
-        "id": "e4",
-        "title": "Cinema Tickets",
-        "amount": 48,
-<<<<<<< Updated upstream
-        "paidBy": "user-you",
-        "participants": [
-          "user-you",
-=======
-        "paidBy": "user-alex",
-        "participants": [
-          "user-alex",
->>>>>>> Stashed changes
-          "maya"
-        ],
-        "groupId": "trip",
-        "category": "🎬",
-<<<<<<< Updated upstream
-        "date": 1780670402046,
-=======
-        "date": 1780583658628,
->>>>>>> Stashed changes
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": false
-      },
-      {
-        "id": "e5",
-        "title": "Beach BBQ",
-        "amount": 120,
-        "paidBy": "chloe",
-        "participants": [
-<<<<<<< Updated upstream
-          "user-you",
-=======
-          "user-alex",
->>>>>>> Stashed changes
-          "alex",
-          "maya",
-          "chloe"
-        ],
-        "groupId": "beach",
-        "category": "🔥",
-<<<<<<< Updated upstream
-        "date": 1780324802046,
-=======
-        "date": 1780238058628,
->>>>>>> Stashed changes
-        "note": null,
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": true,
-        "personal": false
-      },
-      {
-        "id": "p1",
-        "title": "Morning Coffee",
-        "amount": 4.75,
-<<<<<<< Updated upstream
-        "paidBy": "user-you",
-        "participants": [
-          "user-you"
-        ],
-        "groupId": null,
-        "category": "☕",
-        "date": 1781095202046,
-=======
-        "paidBy": "user-alex",
-        "participants": [
-          "user-alex"
-        ],
-        "groupId": null,
-        "category": "☕",
-        "date": 1781008458628,
->>>>>>> Stashed changes
-        "note": "Food",
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": true
-      },
-      {
-        "id": "p2",
-        "title": "Metro Card",
-        "amount": 30,
-<<<<<<< Updated upstream
-        "paidBy": "user-you",
-        "participants": [
-          "user-you"
-        ],
-        "groupId": null,
-        "category": "🚇",
-        "date": 1781016002046,
-=======
-        "paidBy": "user-alex",
-        "participants": [
-          "user-alex"
-        ],
-        "groupId": null,
-        "category": "🚇",
-        "date": 1780929258628,
->>>>>>> Stashed changes
-        "note": "Transport",
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": true
-      },
-      {
-        "id": "p3",
-        "title": "Spotify",
-        "amount": 10.99,
-<<<<<<< Updated upstream
-        "paidBy": "user-you",
-        "participants": [
-          "user-you"
-        ],
-        "groupId": null,
-        "category": "🎧",
-        "date": 1780843202046,
-=======
-        "paidBy": "user-alex",
-        "participants": [
-          "user-alex"
-        ],
-        "groupId": null,
-        "category": "🎧",
-        "date": 1780756458628,
->>>>>>> Stashed changes
-        "note": "Bills",
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": true
-      },
-      {
-        "id": "p4",
-        "title": "Gym Membership",
-        "amount": 45,
-<<<<<<< Updated upstream
-        "paidBy": "user-you",
-        "participants": [
-          "user-you"
-        ],
-        "groupId": null,
-        "category": "💪",
-        "date": 1780584002046,
-=======
-        "paidBy": "user-alex",
-        "participants": [
-          "user-alex"
-        ],
-        "groupId": null,
-        "category": "💪",
-        "date": 1780497258628,
->>>>>>> Stashed changes
-        "note": "Health",
-        "splitMethod": "equal",
-        "splits": {},
-        "settled": false,
-        "personal": true
-      }
-    ],
-    "grocery": [
-      {
-        "id": "g1",
-        "groupId": "apt",
-        "name": "Almond Milk",
-        "tag": "DAIRY FREE",
-        "qty": "2 cartons",
-        "claimedBy": "alex",
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g2",
-        "groupId": "apt",
-        "name": "Avocados",
-        "tag": "PRODUCE",
-        "qty": "Pack of 4",
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g3",
-        "groupId": "apt",
-        "name": "Fresh Pasta",
-        "tag": null,
-        "qty": null,
-        "claimedBy": null,
-        "boughtBy": "alex",
-        "price": 12.5,
-        "done": true
-      },
-      {
-        "id": "g4",
-        "groupId": "apt",
-        "name": "Greek Yogurt",
-        "tag": null,
-        "qty": null,
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g5",
-        "groupId": "apt",
-        "name": "Eggs",
-        "tag": null,
-        "qty": "Dozen",
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g6",
-        "groupId": "apt",
-        "name": "Bread",
-        "tag": "BAKERY",
-        "qty": null,
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      }
-    ]
-  },
-  "user-maya": {
-    "me": "user-maya",
-    "people": [
       {
         "id": "user-maya",
         "name": "Maya",
@@ -801,31 +21,19 @@
         "color": "#8B5CF6"
       },
       {
-        "id": "alex",
-        "name": "Alex",
-        "avatar": "🧑",
-        "color": "#10B981"
+        "id": "user-jordan",
+        "name": "You",
+        "avatar": "😊",
+        "color": "#FF6B6B"
       },
       {
-        "id": "maya",
-        "name": "Maya",
-        "avatar": "👩",
-        "color": "#8B5CF6"
-      },
-      {
-        "id": "jordan",
-        "name": "Jordan",
-        "avatar": "🧔",
-        "color": "#EF4444"
-      },
-      {
-        "id": "chloe",
+        "id": "user-chloe",
         "name": "Chloe",
         "avatar": "👱‍♀️",
         "color": "#F59E0B"
       },
       {
-        "id": "sam",
+        "id": "user-sam",
         "name": "Sam",
         "avatar": "👨",
         "color": "#0EA5E9"
@@ -833,25 +41,25 @@
     ],
     "groups": [
       {
-        "id": "beach",
-        "name": "The Beach House",
-        "emoji": "🏖️",
+        "id": "apt",
+        "name": "Apartment Crew",
+        "emoji": "🏠",
         "members": [
-          "user-maya",
-          "alex",
-          "maya",
-          "chloe"
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
         ]
       },
       {
-        "id": "apt",
-        "name": "The Apartment Crew",
-        "emoji": "🏠",
+        "id": "beach",
+        "name": "Beach House",
+        "emoji": "🏖️",
         "members": [
+          "user-you",
+          "user-alex",
           "user-maya",
-          "alex",
-          "jordan",
-          "sam"
+          "user-chloe"
         ]
       },
       {
@@ -859,264 +67,872 @@
         "name": "Road Trip 2026",
         "emoji": "🚗",
         "members": [
+          "user-you",
           "user-maya",
-          "maya",
-          "sam"
+          "user-sam"
         ]
       }
     ],
     "expenses": [
       {
         "id": "e1",
-        "title": "Five Guys Dinner",
-        "amount": 62.5,
-        "paidBy": "user-maya",
+        "title": "Apartment Rent - Feb",
+        "amount": 1200,
+        "paidBy": "user-you",
         "participants": [
-          "user-maya",
-          "alex",
-          "maya",
-          "jordan",
-          "sam"
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
         ],
         "groupId": "apt",
-        "category": "🍔",
-<<<<<<< Updated upstream
-        "date": 1781098980343,
-=======
-        "date": 1781013547467,
->>>>>>> Stashed changes
-        "note": null,
+        "category": "🏠",
+        "date": 1780000000000,
+        "note": "Monthly rent split",
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": false
       },
       {
         "id": "e2",
-        "title": "Grocery Run",
-        "amount": 90,
-        "paidBy": "alex",
+        "title": "Grocery Shopping",
+        "amount": 120,
+        "paidBy": "user-alex",
         "participants": [
-          "user-maya",
-          "alex"
+          "user-you",
+          "user-alex"
         ],
         "groupId": "apt",
         "category": "🛒",
-<<<<<<< Updated upstream
-        "date": 1781008980343,
-=======
-        "date": 1780923547467,
->>>>>>> Stashed changes
+        "date": 1779900000000,
         "note": null,
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": false
       },
       {
         "id": "e3",
-        "title": "Utilities - Oct",
-        "amount": 240,
-        "paidBy": "user-maya",
+        "title": "Dinner Out",
+        "amount": 200,
+        "paidBy": "user-jordan",
         "participants": [
-          "user-maya",
-          "alex",
-          "jordan",
-          "sam"
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
         ],
         "groupId": "apt",
-        "category": "⚡",
-<<<<<<< Updated upstream
-        "date": 1780929780343,
-=======
-        "date": 1780844347467,
->>>>>>> Stashed changes
-        "note": null,
+        "category": "🍽️",
+        "date": 1779800000000,
+        "note": "Team dinner",
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": false
       },
       {
         "id": "e4",
-        "title": "Cinema Tickets",
-        "amount": 48,
-        "paidBy": "user-maya",
+        "title": "Utilities Payment",
+        "amount": 150,
+        "paidBy": "user-sam",
         "participants": [
-          "user-maya",
-          "maya"
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
         ],
-        "groupId": "trip",
-        "category": "🎬",
-<<<<<<< Updated upstream
-        "date": 1780670580343,
-=======
-        "date": 1780585147467,
->>>>>>> Stashed changes
-        "note": null,
+        "groupId": "apt",
+        "category": "⚡",
+        "date": 1779700000000,
+        "note": "Electric and water",
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
         "personal": false
       },
       {
         "id": "e5",
-        "title": "Beach BBQ",
-        "amount": 120,
-        "paidBy": "chloe",
+        "title": "Beach House Cleanup",
+        "amount": 80,
+        "paidBy": "user-you",
         "participants": [
+          "user-you",
+          "user-alex",
           "user-maya",
-          "alex",
-          "maya",
-          "chloe"
+          "user-chloe"
+        ],
+        "groupId": "beach",
+        "category": "🧹",
+        "date": 1779600000000,
+        "note": "Supplies and service",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e6",
+        "title": "Beach BBQ Food",
+        "amount": 160,
+        "paidBy": "user-chloe",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-maya",
+          "user-chloe"
         ],
         "groupId": "beach",
         "category": "🔥",
-<<<<<<< Updated upstream
-        "date": 1780324980343,
-=======
-        "date": 1780239547467,
->>>>>>> Stashed changes
+        "date": 1779500000000,
+        "note": "Burgers, hot dogs, etc",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e7",
+        "title": "Gas for Road Trip",
+        "amount": 90,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "user-maya",
+          "user-sam"
+        ],
+        "groupId": "trip",
+        "category": "⛽",
+        "date": 1779400000000,
+        "note": "Split gas equally",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e8",
+        "title": "Hotel Night",
+        "amount": 300,
+        "paidBy": "user-maya",
+        "participants": [
+          "user-you",
+          "user-maya",
+          "user-sam"
+        ],
+        "groupId": "trip",
+        "category": "🏨",
+        "date": 1779300000000,
+        "note": "One night accommodation",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      }
+    ],
+    "grocery": []
+  },
+  "user-alex": {
+    "me": "user-alex",
+    "people": [
+      {
+        "id": "user-you",
+        "name": "You",
+        "avatar": "😊",
+        "color": "#FF6B6B"
+      },
+      {
+        "id": "user-alex",
+        "name": "You",
+        "avatar": "😊",
+        "color": "#FF6B6B"
+      },
+      {
+        "id": "user-maya",
+        "name": "Maya",
+        "avatar": "👩",
+        "color": "#8B5CF6"
+      },
+      {
+        "id": "user-jordan",
+        "name": "Jordan",
+        "avatar": "🧔",
+        "color": "#EF4444"
+      },
+      {
+        "id": "user-chloe",
+        "name": "Chloe",
+        "avatar": "👱‍♀️",
+        "color": "#F59E0B"
+      },
+      {
+        "id": "user-sam",
+        "name": "Sam",
+        "avatar": "👨",
+        "color": "#0EA5E9"
+      }
+    ],
+    "groups": [
+      {
+        "id": "apt",
+        "name": "Apartment Crew",
+        "emoji": "🏠",
+        "members": [
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
+        ]
+      },
+      {
+        "id": "beach",
+        "name": "Beach House",
+        "emoji": "🏖️",
+        "members": [
+          "user-you",
+          "user-alex",
+          "user-maya",
+          "user-chloe"
+        ]
+      },
+      {
+        "id": "trip",
+        "name": "Road Trip 2026",
+        "emoji": "🚗",
+        "members": [
+          "user-you",
+          "user-maya",
+          "user-sam"
+        ]
+      }
+    ],
+    "expenses": [
+      {
+        "id": "e1",
+        "title": "Apartment Rent - Feb",
+        "amount": 1200,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
+        ],
+        "groupId": "apt",
+        "category": "🏠",
+        "date": 1780000000000,
+        "note": "Monthly rent split",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e2",
+        "title": "Grocery Shopping",
+        "amount": 120,
+        "paidBy": "user-alex",
+        "participants": [
+          "user-you",
+          "user-alex"
+        ],
+        "groupId": "apt",
+        "category": "🛒",
+        "date": 1779900000000,
         "note": null,
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e3",
+        "title": "Dinner Out",
+        "amount": 200,
+        "paidBy": "user-jordan",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
+        ],
+        "groupId": "apt",
+        "category": "🍽️",
+        "date": 1779800000000,
+        "note": "Team dinner",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e4",
+        "title": "Utilities Payment",
+        "amount": 150,
+        "paidBy": "user-sam",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
+        ],
+        "groupId": "apt",
+        "category": "⚡",
+        "date": 1779700000000,
+        "note": "Electric and water",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e5",
+        "title": "Beach House Cleanup",
+        "amount": 80,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-maya",
+          "user-chloe"
+        ],
+        "groupId": "beach",
+        "category": "🧹",
+        "date": 1779600000000,
+        "note": "Supplies and service",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e6",
+        "title": "Beach BBQ Food",
+        "amount": 160,
+        "paidBy": "user-chloe",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-maya",
+          "user-chloe"
+        ],
+        "groupId": "beach",
+        "category": "🔥",
+        "date": 1779500000000,
+        "note": "Burgers, hot dogs, etc",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e7",
+        "title": "Gas for Road Trip",
+        "amount": 90,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "user-maya",
+          "user-sam"
+        ],
+        "groupId": "trip",
+        "category": "⛽",
+        "date": 1779400000000,
+        "note": "Split gas equally",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e8",
+        "title": "Hotel Night",
+        "amount": 300,
+        "paidBy": "user-maya",
+        "participants": [
+          "user-you",
+          "user-maya",
+          "user-sam"
+        ],
+        "groupId": "trip",
+        "category": "🏨",
+        "date": 1779300000000,
+        "note": "One night accommodation",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      }
+    ],
+    "grocery": []
+  },
+  "user-maya": {
+    "me": "user-maya",
+    "people": [
+      {
+        "id": "user-you",
+        "name": "You",
+        "avatar": "😊",
+        "color": "#FF6B6B"
+      },
+      {
+        "id": "user-alex",
+        "name": "Alex",
+        "avatar": "🧑",
+        "color": "#10B981"
+      },
+      {
+        "id": "user-maya",
+        "name": "You",
+        "avatar": "😊",
+        "color": "#FF6B6B"
+      },
+      {
+        "id": "user-jordan",
+        "name": "Jordan",
+        "avatar": "🧔",
+        "color": "#EF4444"
+      },
+      {
+        "id": "user-chloe",
+        "name": "Chloe",
+        "avatar": "👱‍♀️",
+        "color": "#F59E0B"
+      },
+      {
+        "id": "user-sam",
+        "name": "Sam",
+        "avatar": "👨",
+        "color": "#0EA5E9"
+      }
+    ],
+    "groups": [
+      {
+        "id": "apt",
+        "name": "Apartment Crew",
+        "emoji": "🏠",
+        "members": [
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
+        ]
+      },
+      {
+        "id": "beach",
+        "name": "Beach House",
+        "emoji": "🏖️",
+        "members": [
+          "user-you",
+          "user-alex",
+          "user-maya",
+          "user-chloe"
+        ]
+      },
+      {
+        "id": "trip",
+        "name": "Road Trip 2026",
+        "emoji": "🚗",
+        "members": [
+          "user-you",
+          "user-maya",
+          "user-sam"
+        ]
+      }
+    ],
+    "expenses": [
+      {
+        "id": "e1",
+        "title": "Apartment Rent - Feb",
+        "amount": 1200,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
+        ],
+        "groupId": "apt",
+        "category": "🏠",
+        "date": 1780000000000,
+        "note": "Monthly rent split",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e2",
+        "title": "Grocery Shopping",
+        "amount": 120,
+        "paidBy": "user-alex",
+        "participants": [
+          "user-you",
+          "user-alex"
+        ],
+        "groupId": "apt",
+        "category": "🛒",
+        "date": 1779900000000,
+        "note": null,
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e3",
+        "title": "Dinner Out",
+        "amount": 200,
+        "paidBy": "user-jordan",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
+        ],
+        "groupId": "apt",
+        "category": "🍽️",
+        "date": 1779800000000,
+        "note": "Team dinner",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e4",
+        "title": "Utilities Payment",
+        "amount": 150,
+        "paidBy": "user-sam",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
+        ],
+        "groupId": "apt",
+        "category": "⚡",
+        "date": 1779700000000,
+        "note": "Electric and water",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e5",
+        "title": "Beach House Cleanup",
+        "amount": 80,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-maya",
+          "user-chloe"
+        ],
+        "groupId": "beach",
+        "category": "🧹",
+        "date": 1779600000000,
+        "note": "Supplies and service",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e6",
+        "title": "Beach BBQ Food",
+        "amount": 160,
+        "paidBy": "user-chloe",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-maya",
+          "user-chloe"
+        ],
+        "groupId": "beach",
+        "category": "🔥",
+        "date": 1779500000000,
+        "note": "Burgers, hot dogs, etc",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e7",
+        "title": "Gas for Road Trip",
+        "amount": 90,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "user-maya",
+          "user-sam"
+        ],
+        "groupId": "trip",
+        "category": "⛽",
+        "date": 1779400000000,
+        "note": "Split gas equally",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e8",
+        "title": "Hotel Night",
+        "amount": 300,
+        "paidBy": "user-maya",
+        "participants": [
+          "user-you",
+          "user-maya",
+          "user-sam"
+        ],
+        "groupId": "trip",
+        "category": "🏨",
+        "date": 1779300000000,
+        "note": "One night accommodation",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      }
+    ],
+    "grocery": []
+  },
+  "user-you": {
+    "me": "user-you",
+    "people": [
+      {
+        "id": "user-you",
+        "name": "You",
+        "avatar": "😊",
+        "color": "#FF6B6B"
+      },
+      {
+        "id": "user-alex",
+        "name": "Alex",
+        "avatar": "🧑",
+        "color": "#10B981"
+      },
+      {
+        "id": "user-maya",
+        "name": "Maya",
+        "avatar": "👩",
+        "color": "#8B5CF6"
+      },
+      {
+        "id": "user-jordan",
+        "name": "Jordan",
+        "avatar": "🧔",
+        "color": "#EF4444"
+      },
+      {
+        "id": "user-chloe",
+        "name": "Chloe",
+        "avatar": "👱‍♀️",
+        "color": "#F59E0B"
+      },
+      {
+        "id": "user-sam",
+        "name": "Sam",
+        "avatar": "👨",
+        "color": "#0EA5E9"
+      }
+    ],
+    "groups": [
+      {
+        "id": "apt",
+        "name": "Apartment Crew",
+        "emoji": "🏠",
+        "members": [
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
+        ]
+      },
+      {
+        "id": "beach",
+        "name": "Beach House",
+        "emoji": "🏖️",
+        "members": [
+          "user-you",
+          "user-alex",
+          "user-maya",
+          "user-chloe"
+        ]
+      },
+      {
+        "id": "trip",
+        "name": "Road Trip 2026",
+        "emoji": "🚗",
+        "members": [
+          "user-you",
+          "user-maya",
+          "user-sam"
+        ]
+      }
+    ],
+    "expenses": [
+      {
+        "id": "e1",
+        "title": "Apartment Rent - Feb",
+        "amount": 1200,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
+        ],
+        "groupId": "apt",
+        "category": "🏠",
+        "date": 1780000000000,
+        "note": "Monthly rent split",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e2",
+        "title": "Grocery Shopping",
+        "amount": 120,
+        "paidBy": "user-alex",
+        "participants": [
+          "user-you",
+          "user-alex"
+        ],
+        "groupId": "apt",
+        "category": "🛒",
+        "date": 1779900000000,
+        "note": null,
+        "splitMethod": "equal",
+        "splits": {},
         "settled": true,
         "personal": false
       },
       {
-        "id": "p1",
-        "title": "Morning Coffee",
-        "amount": 4.75,
-        "paidBy": "user-maya",
+        "id": "e3",
+        "title": "Dinner Out",
+        "amount": 200,
+        "paidBy": "user-jordan",
         "participants": [
-          "user-maya"
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
         ],
-        "groupId": null,
-        "category": "☕",
-<<<<<<< Updated upstream
-        "date": 1781095380343,
-=======
-        "date": 1781009947467,
->>>>>>> Stashed changes
-        "note": "Food",
+        "groupId": "apt",
+        "category": "🍽️",
+        "date": 1779800000000,
+        "note": "Team dinner",
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
-        "personal": true
+        "personal": false
       },
       {
-        "id": "p2",
-        "title": "Metro Card",
-        "amount": 30,
-        "paidBy": "user-maya",
+        "id": "e4",
+        "title": "Utilities Payment",
+        "amount": 150,
+        "paidBy": "user-sam",
         "participants": [
-          "user-maya"
+          "user-you",
+          "user-alex",
+          "user-jordan",
+          "user-sam"
         ],
-        "groupId": null,
-        "category": "🚇",
-<<<<<<< Updated upstream
-        "date": 1781016180343,
-=======
-        "date": 1780930747467,
->>>>>>> Stashed changes
-        "note": "Transport",
+        "groupId": "apt",
+        "category": "⚡",
+        "date": 1779700000000,
+        "note": "Electric and water",
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
-        "personal": true
+        "personal": false
       },
       {
-        "id": "p3",
-        "title": "Spotify",
-        "amount": 10.99,
-        "paidBy": "user-maya",
+        "id": "e5",
+        "title": "Beach House Cleanup",
+        "amount": 80,
+        "paidBy": "user-you",
         "participants": [
-          "user-maya"
+          "user-you",
+          "user-alex",
+          "user-maya",
+          "user-chloe"
         ],
-        "groupId": null,
-        "category": "🎧",
-<<<<<<< Updated upstream
-        "date": 1780843380343,
-=======
-        "date": 1780757947467,
->>>>>>> Stashed changes
-        "note": "Bills",
+        "groupId": "beach",
+        "category": "🧹",
+        "date": 1779600000000,
+        "note": "Supplies and service",
+        "splitMethod": "equal",
+        "splits": {},
         "settled": false,
-        "personal": true
+        "personal": false
       },
       {
-        "id": "p4",
-        "title": "Gym Membership",
-        "amount": 45,
+        "id": "e6",
+        "title": "Beach BBQ Food",
+        "amount": 160,
+        "paidBy": "user-chloe",
+        "participants": [
+          "user-you",
+          "user-alex",
+          "user-maya",
+          "user-chloe"
+        ],
+        "groupId": "beach",
+        "category": "🔥",
+        "date": 1779500000000,
+        "note": "Burgers, hot dogs, etc",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e7",
+        "title": "Gas for Road Trip",
+        "amount": 90,
+        "paidBy": "user-you",
+        "participants": [
+          "user-you",
+          "user-maya",
+          "user-sam"
+        ],
+        "groupId": "trip",
+        "category": "⛽",
+        "date": 1779400000000,
+        "note": "Split gas equally",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": false,
+        "personal": false
+      },
+      {
+        "id": "e8",
+        "title": "Hotel Night",
+        "amount": 300,
         "paidBy": "user-maya",
         "participants": [
-          "user-maya"
+          "user-you",
+          "user-maya",
+          "user-sam"
         ],
-        "groupId": null,
-        "category": "💪",
-<<<<<<< Updated upstream
-        "date": 1780584180343,
-=======
-        "date": 1780498747467,
->>>>>>> Stashed changes
-        "note": "Health",
-        "settled": false,
-        "personal": true
+        "groupId": "trip",
+        "category": "🏨",
+        "date": 1779300000000,
+        "note": "One night accommodation",
+        "splitMethod": "equal",
+        "splits": {},
+        "settled": true,
+        "personal": false
       }
     ],
-    "grocery": [
-      {
-        "id": "g1",
-        "groupId": "apt",
-        "name": "Almond Milk",
-        "tag": "DAIRY FREE",
-        "qty": "2 cartons",
-        "claimedBy": "alex",
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g2",
-        "groupId": "apt",
-        "name": "Avocados",
-        "tag": "PRODUCE",
-        "qty": "Pack of 4",
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g3",
-        "groupId": "apt",
-        "name": "Fresh Pasta",
-        "tag": null,
-        "qty": null,
-        "claimedBy": null,
-        "boughtBy": "alex",
-        "price": 12.5,
-        "done": true
-      },
-      {
-        "id": "g4",
-        "groupId": "apt",
-        "name": "Greek Yogurt",
-        "tag": null,
-        "qty": null,
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g5",
-        "groupId": "apt",
-        "name": "Eggs",
-        "tag": null,
-        "qty": "Dozen",
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      },
-      {
-        "id": "g6",
-        "groupId": "apt",
-        "name": "Bread",
-        "tag": "BAKERY",
-        "qty": null,
-        "claimedBy": null,
-        "boughtBy": null,
-        "price": null,
-        "done": false
-      }
-    ]
+    "grocery": []
   }
 }

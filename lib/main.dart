@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_shell.dart';
 import 'app_state.dart';
@@ -38,7 +37,6 @@ class ClearSplitApp extends StatelessWidget {
       title: 'clearsplit',
       theme: baseTheme.copyWith(
         scaffoldBackgroundColor: const Color(0xFFF4F7FB),
-        textTheme: GoogleFonts.spaceGroteskTextTheme(baseTheme.textTheme),
       ),
       home: SessionGate(controller: controller),
     );

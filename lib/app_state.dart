@@ -58,7 +58,12 @@ const List<DemoAccount> demoAccounts = [
 ];
 
 class Person {
-  const Person({required this.id, required this.name, required this.avatar, required this.color});
+  const Person({
+    required this.id,
+    required this.name,
+    required this.avatar,
+    required this.color,
+  });
 
   final String id;
   final String name;
@@ -66,11 +71,11 @@ class Person {
   final String color;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'avatar': avatar,
-        'color': color,
-      };
+    'id': id,
+    'name': name,
+    'avatar': avatar,
+    'color': color,
+  };
 
   factory Person.fromJson(Map<String, dynamic> json) {
     return Person(
@@ -83,7 +88,12 @@ class Person {
 }
 
 class Group {
-  const Group({required this.id, required this.name, required this.emoji, required this.members});
+  const Group({
+    required this.id,
+    required this.name,
+    required this.emoji,
+    required this.members,
+  });
 
   final String id;
   final String name;
@@ -91,11 +101,11 @@ class Group {
   final List<String> members;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'emoji': emoji,
-        'members': members,
-      };
+    'id': id,
+    'name': name,
+    'emoji': emoji,
+    'members': members,
+  };
 
   factory Group.fromJson(Map<String, dynamic> json) {
     return Group(
@@ -139,20 +149,20 @@ class Expense {
   final bool personal;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'amount': amount,
-        'paidBy': paidBy,
-        'participants': participants,
-        'groupId': groupId,
-        'category': category,
-        'date': date.millisecondsSinceEpoch,
-        'note': note,
-        'splitMethod': splitMethod,
-        'splits': splits,
-        'settled': settled,
-        'personal': personal,
-      };
+    'id': id,
+    'title': title,
+    'amount': amount,
+    'paidBy': paidBy,
+    'participants': participants,
+    'groupId': groupId,
+    'category': category,
+    'date': date.millisecondsSinceEpoch,
+    'note': note,
+    'splitMethod': splitMethod,
+    'splits': splits,
+    'settled': settled,
+    'personal': personal,
+  };
 
   factory Expense.fromJson(Map<String, dynamic> json) {
     final splits = json['splits'] as Map<String, dynamic>?;
@@ -164,13 +174,32 @@ class Expense {
       participants: List<String>.from(json['participants'] as List<dynamic>),
       groupId: json['groupId'] as String?,
       category: json['category'] as String,
-      date: DateTime.fromMillisecondsSinceEpoch((json['date'] as num).toInt()),
+      date: _dateFromJson(json['date']),
       note: json['note'] as String?,
       splitMethod: (json['splitMethod'] as String?) ?? 'equal',
-      splits: splits != null ? splits.map((k, v) => MapEntry(k, (v as num).toDouble())) : {},
+      splits: splits != null
+          ? splits.map((k, v) => MapEntry(k, (v as num).toDouble()))
+          : {},
       settled: (json['settled'] as bool?) ?? false,
       personal: (json['personal'] as bool?) ?? false,
     );
+  }
+
+  static DateTime _dateFromJson(Object? value) {
+    if (value is num) {
+      return DateTime.fromMillisecondsSinceEpoch(value.toInt());
+    }
+    if (value is String) {
+      final parsed = DateTime.tryParse(value);
+      if (parsed != null) {
+        return parsed;
+      }
+      final timestamp = num.tryParse(value);
+      if (timestamp != null) {
+        return DateTime.fromMillisecondsSinceEpoch(timestamp.toInt());
+      }
+    }
+    return DateTime.now();
   }
 
   double getParticipantShare(String participantId) {
@@ -206,16 +235,16 @@ class GroceryItem {
   final bool done;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'groupId': groupId,
-        'name': name,
-        'tag': tag,
-        'qty': qty,
-        'claimedBy': claimedBy,
-        'boughtBy': boughtBy,
-        'price': price,
-        'done': done,
-      };
+    'id': id,
+    'groupId': groupId,
+    'name': name,
+    'tag': tag,
+    'qty': qty,
+    'claimedBy': claimedBy,
+    'boughtBy': boughtBy,
+    'price': price,
+    'done': done,
+  };
 
   factory GroceryItem.fromJson(Map<String, dynamic> json) {
     return GroceryItem(
@@ -264,27 +293,48 @@ class AppData {
   }
 
   Map<String, dynamic> toJson() => {
-        'me': me,
-        'people': people.map((person) => person.toJson()).toList(),
-        'groups': groups.map((group) => group.toJson()).toList(),
-        'expenses': expenses.map((expense) => expense.toJson()).toList(),
-        'grocery': grocery.map((item) => item.toJson()).toList(),
-      };
+    'me': me,
+    'people': people.map((person) => person.toJson()).toList(),
+    'groups': groups.map((group) => group.toJson()).toList(),
+    'expenses': expenses.map((expense) => expense.toJson()).toList(),
+    'grocery': grocery.map((item) => item.toJson()).toList(),
+  };
 
   factory AppData.fromJson(Map<String, dynamic> json) {
+    List<dynamic> listFor(String key) {
+      final value = json[key];
+      if (value is List<dynamic>) {
+        return value;
+      }
+      if (value is List) {
+        return value.cast<dynamic>();
+      }
+      return const <dynamic>[];
+    }
+
     return AppData(
       me: json['me'] as String,
-      people: (json['people'] as List<dynamic>)
-          .map((entry) => Person.fromJson(Map<String, dynamic>.from(entry as Map)))
+      people: listFor('people')
+          .map(
+            (entry) => Person.fromJson(Map<String, dynamic>.from(entry as Map)),
+          )
           .toList(),
-      groups: (json['groups'] as List<dynamic>)
-          .map((entry) => Group.fromJson(Map<String, dynamic>.from(entry as Map)))
+      groups: listFor('groups')
+          .map(
+            (entry) => Group.fromJson(Map<String, dynamic>.from(entry as Map)),
+          )
           .toList(),
-      expenses: (json['expenses'] as List<dynamic>)
-          .map((entry) => Expense.fromJson(Map<String, dynamic>.from(entry as Map)))
+      expenses: listFor('expenses')
+          .map(
+            (entry) =>
+                Expense.fromJson(Map<String, dynamic>.from(entry as Map)),
+          )
           .toList(),
-      grocery: (json['grocery'] as List<dynamic>)
-          .map((entry) => GroceryItem.fromJson(Map<String, dynamic>.from(entry as Map)))
+      grocery: listFor('grocery')
+          .map(
+            (entry) =>
+                GroceryItem.fromJson(Map<String, dynamic>.from(entry as Map)),
+          )
           .toList(),
     );
   }
@@ -302,22 +352,65 @@ class AppData {
       return result;
     }
 
-    final people = <Person>[
-      Person(id: meId, name: account.displayName, avatar: account.avatar, color: account.color),
-      const Person(id: 'alex', name: 'Alex', avatar: '🧑', color: '#10B981'),
-      const Person(id: 'maya', name: 'Maya', avatar: '👩', color: '#8B5CF6'),
-      const Person(id: 'jordan', name: 'Jordan', avatar: '🧔', color: '#EF4444'),
-      const Person(id: 'chloe', name: 'Chloe', avatar: '👱‍♀️', color: '#F59E0B'),
-      const Person(id: 'sam', name: 'Sam', avatar: '👨', color: '#0EA5E9'),
-    ]..removeWhere((person) => person.id == meId && person.name != account.displayName);
+    final people =
+        <Person>[
+          Person(
+            id: meId,
+            name: account.displayName,
+            avatar: account.avatar,
+            color: account.color,
+          ),
+          const Person(
+            id: 'alex',
+            name: 'Alex',
+            avatar: '🧑',
+            color: '#10B981',
+          ),
+          const Person(
+            id: 'maya',
+            name: 'Maya',
+            avatar: '👩',
+            color: '#8B5CF6',
+          ),
+          const Person(
+            id: 'jordan',
+            name: 'Jordan',
+            avatar: '🧔',
+            color: '#EF4444',
+          ),
+          const Person(
+            id: 'chloe',
+            name: 'Chloe',
+            avatar: '👱‍♀️',
+            color: '#F59E0B',
+          ),
+          const Person(id: 'sam', name: 'Sam', avatar: '👨', color: '#0EA5E9'),
+        ]..removeWhere(
+          (person) => person.id == meId && person.name != account.displayName,
+        );
 
     return AppData(
       me: meId,
       people: people,
       groups: [
-        Group(id: 'beach', name: 'The Beach House', emoji: '🏖️', members: uniqueIds([meId, 'alex', 'maya', 'chloe'])),
-        Group(id: 'apt', name: 'The Apartment Crew', emoji: '🏠', members: uniqueIds([meId, 'alex', 'jordan', 'sam'])),
-        Group(id: 'trip', name: 'Road Trip 2026', emoji: '🚗', members: uniqueIds([meId, 'maya', 'sam'])),
+        Group(
+          id: 'beach',
+          name: 'The Beach House',
+          emoji: '🏖️',
+          members: uniqueIds([meId, 'alex', 'maya', 'chloe']),
+        ),
+        Group(
+          id: 'apt',
+          name: 'The Apartment Crew',
+          emoji: '🏠',
+          members: uniqueIds([meId, 'alex', 'jordan', 'sam']),
+        ),
+        Group(
+          id: 'trip',
+          name: 'Road Trip 2026',
+          emoji: '🚗',
+          members: uniqueIds([meId, 'maya', 'sam']),
+        ),
       ],
       expenses: [
         Expense(
@@ -417,9 +510,29 @@ class AppData {
         ),
       ],
       grocery: [
-        GroceryItem(id: 'g1', groupId: 'apt', name: 'Almond Milk', tag: 'DAIRY FREE', qty: '2 cartons', claimedBy: 'alex'),
-        GroceryItem(id: 'g2', groupId: 'apt', name: 'Avocados', tag: 'PRODUCE', qty: 'Pack of 4'),
-        GroceryItem(id: 'g3', groupId: 'apt', name: 'Fresh Pasta', boughtBy: 'alex', price: 12.5, done: true),
+        GroceryItem(
+          id: 'g1',
+          groupId: 'apt',
+          name: 'Almond Milk',
+          tag: 'DAIRY FREE',
+          qty: '2 cartons',
+          claimedBy: 'alex',
+        ),
+        GroceryItem(
+          id: 'g2',
+          groupId: 'apt',
+          name: 'Avocados',
+          tag: 'PRODUCE',
+          qty: 'Pack of 4',
+        ),
+        GroceryItem(
+          id: 'g3',
+          groupId: 'apt',
+          name: 'Fresh Pasta',
+          boughtBy: 'alex',
+          price: 12.5,
+          done: true,
+        ),
         GroceryItem(id: 'g4', groupId: 'apt', name: 'Greek Yogurt'),
         GroceryItem(id: 'g5', groupId: 'apt', name: 'Eggs', qty: 'Dozen'),
         GroceryItem(id: 'g6', groupId: 'apt', name: 'Bread', tag: 'BAKERY'),
@@ -429,7 +542,12 @@ class AppData {
 }
 
 class BalanceSummary {
-  const BalanceSummary({required this.owed, required this.owe, required this.net, required this.perPerson});
+  const BalanceSummary({
+    required this.owed,
+    required this.owe,
+    required this.net,
+    required this.perPerson,
+  });
 
   final double owed;
   final double owe;
@@ -438,9 +556,11 @@ class BalanceSummary {
 }
 
 class AppController extends ChangeNotifier {
-  AppController({BackendClient? backendClient}) : _backendClient = backendClient ?? BackendClient();
+  AppController({BackendClient? backendClient})
+    : _backendClient = backendClient ?? BackendClient();
 
   final BackendClient _backendClient;
+
   /// A Future that completes when the controller has finished any async
   /// initialization. Currently initialization is synchronous, so this
   /// returns a completed Future. Tests may await this getter.
@@ -465,9 +585,15 @@ class AppController extends ChangeNotifier {
     return null;
   }
 
-  Future<String?> signIn({required String email, required String password}) async {
+  Future<String?> signIn({
+    required String email,
+    required String password,
+  }) async {
     try {
-      final session = await _backendClient.signIn(email: email.trim(), password: password);
+      final session = await _backendClient.signIn(
+        email: email.trim(),
+        password: password,
+      );
       _activeAccount = session.account;
       _state = session.state;
       notifyListeners();
@@ -476,14 +602,16 @@ class AppController extends ChangeNotifier {
       return error.message;
     } on BackendClientException catch (error) {
       return error.message;
-    } catch (_) {
-      return 'Unable to connect to the backend.';
+    } catch (error) {
+      return 'Unable to load account data: $error';
     }
   }
 
   Future<void> signOut() async {
     if (_activeAccount != null) {
-      unawaited(_backendClient.saveState(userId: _activeAccount!.id, state: _state));
+      unawaited(
+        _backendClient.saveState(userId: _activeAccount!.id, state: _state),
+      );
     }
     _activeAccount = null;
     _state = AppData.seedForAccount(demoAccounts.first);
@@ -499,14 +627,18 @@ class AppController extends ChangeNotifier {
 
     _state = AppData.seedForAccount(_activeAccount!);
     notifyListeners();
-    unawaited(_backendClient.saveState(userId: _activeAccount!.id, state: _state));
+    unawaited(
+      _backendClient.saveState(userId: _activeAccount!.id, state: _state),
+    );
   }
 
   void _update(AppData next) {
     _state = next;
     notifyListeners();
     if (_activeAccount != null) {
-      unawaited(_backendClient.saveState(userId: _activeAccount!.id, state: next));
+      unawaited(
+        _backendClient.saveState(userId: _activeAccount!.id, state: next),
+      );
     }
   }
 
@@ -528,13 +660,17 @@ class AppController extends ChangeNotifier {
     return null;
   }
 
-  List<Expense> get recentSharedExpenses => _state.expenses.where((expense) => !expense.personal).take(4).toList();
+  List<Expense> get recentSharedExpenses =>
+      _state.expenses.where((expense) => !expense.personal).take(4).toList();
 
-  List<Expense> get personalExpenses => _state.expenses.where((expense) => expense.personal).toList();
+  List<Expense> get personalExpenses =>
+      _state.expenses.where((expense) => expense.personal).toList();
 
-  List<Expense> get sharedExpenses => _state.expenses.where((expense) => !expense.personal).toList();
+  List<Expense> get sharedExpenses =>
+      _state.expenses.where((expense) => !expense.personal).toList();
 
-  List<GroceryItem> groceryForGroup(String groupId) => _state.grocery.where((item) => item.groupId == groupId).toList();
+  List<GroceryItem> groceryForGroup(String groupId) =>
+      _state.grocery.where((item) => item.groupId == groupId).toList();
 
   BalanceSummary computeBalances() {
     double owed = 0;
@@ -545,7 +681,8 @@ class AppController extends ChangeNotifier {
       if (expense.settled || expense.personal) {
         continue;
       }
-      if (!expense.participants.contains(_state.me) && expense.paidBy != _state.me) {
+      if (!expense.participants.contains(_state.me) &&
+          expense.paidBy != _state.me) {
         continue;
       }
 
@@ -570,17 +707,111 @@ class AppController extends ChangeNotifier {
       }
     }
 
-    return BalanceSummary(owed: owed, owe: owe, net: owed - owe, perPerson: perPerson);
+    return BalanceSummary(
+      owed: owed,
+      owe: owe,
+      net: owed - owe,
+      perPerson: perPerson,
+    );
   }
 
-  double get personalTotal => personalExpenses.fold<double>(0, (sum, expense) => sum + expense.amount);
+  /// Compute settlement instructions for a group.
+  /// Returns a map keyed by member id with a list of payments they should make:
+  /// { "alice": [ {"to": "bob", "amount": 12.34}, ... ], ... }
+  Map<String, List<Map<String, dynamic>>> computeGroupSettlements(String groupId) {
+    final group = groupById(groupId);
+    if (group == null) return {};
+
+    // Initialize net balances for members (positive => others owe them).
+    final balances = <String, double>{};
+    for (final m in group.members) {
+      balances[m] = 0.0;
+    }
+
+    // Helper to compute shares for an expense
+    Map<String, double> _computeShares(Expense expense) {
+      final parts = expense.participants;
+      if (expense.splits.isNotEmpty) {
+        final sum = expense.splits.values.fold<double>(0, (a, b) => a + b);
+        // If splits look like percentages (sum ~= 1) convert to amounts
+        if ((sum - 1.0).abs() < 0.001) {
+          return expense.splits.map((k, v) => MapEntry(k, v * expense.amount));
+        }
+        // If splits sum equals amount, assume they are amounts
+        if ((sum - expense.amount).abs() < 0.001) {
+          return Map<String, double>.from(expense.splits);
+        }
+      }
+      final share = expense.amount / parts.length;
+      return {for (final p in parts) p: share};
+    }
+
+    for (final expense in _state.expenses) {
+      if (expense.groupId != groupId) continue;
+      if (expense.settled || expense.personal) continue;
+      final shares = _computeShares(expense);
+      // Subtract each participant's share
+      for (final entry in shares.entries) {
+        balances.update(entry.key, (v) => v - entry.value, ifAbsent: () => -entry.value);
+      }
+      // Credit the payer with the full amount
+      balances.update(expense.paidBy, (v) => v + expense.amount, ifAbsent: () => expense.amount);
+    }
+
+    // Build creditor and debtor lists
+    final creditors = <MapEntry<String, double>>[];
+    final debtors = <MapEntry<String, double>>[];
+    const eps = 0.0001;
+    for (final e in balances.entries) {
+      if (e.value > eps) creditors.add(e);
+      if (e.value < -eps) debtors.add(e);
+    }
+
+    creditors.sort((a, b) => b.value.compareTo(a.value));
+    debtors.sort((a, b) => a.value.compareTo(b.value)); // most negative first
+
+    final payments = <String, List<Map<String, dynamic>>>{};
+    for (final m in group.members) payments[m] = [];
+
+    var ci = 0, di = 0;
+    while (ci < creditors.length && di < debtors.length) {
+      final cred = creditors[ci];
+      final debt = debtors[di];
+      final amount = (cred.value.abs() < debt.value.abs()) ? cred.value : -debt.value;
+      // debtor pays creditor
+      payments[debt.key]!.add({'to': cred.key, 'amount': double.parse(amount.toStringAsFixed(2))});
+
+      // update lists
+      final newCred = cred.value - amount;
+      final newDebt = debt.value + amount;
+      if (newCred.abs() < eps) {
+        ci++;
+      } else {
+        creditors[ci] = MapEntry(cred.key, newCred);
+      }
+      if (newDebt.abs() < eps) {
+        di++;
+      } else {
+        debtors[di] = MapEntry(debt.key, newDebt);
+      }
+    }
+
+    return payments;
+  }
+
+  double get personalTotal =>
+      personalExpenses.fold<double>(0, (sum, expense) => sum + expense.amount);
 
   Group? get topGroup => _state.groups.isEmpty ? null : _state.groups.first;
 
-  double groupTotal(String groupId) => _state.expenses.where((expense) => expense.groupId == groupId).fold<double>(0, (sum, expense) => sum + expense.amount);
+  double groupTotal(String groupId) => _state.expenses
+      .where((expense) => expense.groupId == groupId)
+      .fold<double>(0, (sum, expense) => sum + expense.amount);
 
   int settledPercent(String groupId) {
-    final groupExpenses = _state.expenses.where((expense) => expense.groupId == groupId).toList();
+    final groupExpenses = _state.expenses
+        .where((expense) => expense.groupId == groupId)
+        .toList();
     if (groupExpenses.isEmpty) {
       return 0;
     }
@@ -645,8 +876,15 @@ class AppController extends ChangeNotifier {
     final group = groupById(groupId);
     if (group == null) return;
     if (group.members.contains(personId)) return;
-    final updated = Group(id: group.id, name: group.name, emoji: group.emoji, members: [...group.members, personId]);
-    final nextGroups = _state.groups.map((g) => g.id == groupId ? updated : g).toList();
+    final updated = Group(
+      id: group.id,
+      name: group.name,
+      emoji: group.emoji,
+      members: [...group.members, personId],
+    );
+    final nextGroups = _state.groups
+        .map((g) => g.id == groupId ? updated : g)
+        .toList();
     _update(_state.copyWith(groups: nextGroups));
   }
 
@@ -654,28 +892,39 @@ class AppController extends ChangeNotifier {
     final group = groupById(groupId);
     if (group == null) return;
     if (!group.members.contains(personId)) return;
-    final updated = Group(id: group.id, name: group.name, emoji: group.emoji, members: group.members.where((m) => m != personId).toList());
-    final nextGroups = _state.groups.map((g) => g.id == groupId ? updated : g).toList();
+    final updated = Group(
+      id: group.id,
+      name: group.name,
+      emoji: group.emoji,
+      members: group.members.where((m) => m != personId).toList(),
+    );
+    final nextGroups = _state.groups
+        .map((g) => g.id == groupId ? updated : g)
+        .toList();
     _update(_state.copyWith(groups: nextGroups));
   }
 
   void markSettled(String id) {
     final nextExpenses = _state.expenses
-        .map((expense) => expense.id == id ? Expense(
-              id: expense.id,
-              title: expense.title,
-              amount: expense.amount,
-              paidBy: expense.paidBy,
-              participants: expense.participants,
-              groupId: expense.groupId,
-              category: expense.category,
-              date: expense.date,
-              note: expense.note,
-              splitMethod: expense.splitMethod,
-              splits: expense.splits,
-              settled: true,
-              personal: expense.personal,
-            ) : expense)
+        .map(
+          (expense) => expense.id == id
+              ? Expense(
+                  id: expense.id,
+                  title: expense.title,
+                  amount: expense.amount,
+                  paidBy: expense.paidBy,
+                  participants: expense.participants,
+                  groupId: expense.groupId,
+                  category: expense.category,
+                  date: expense.date,
+                  note: expense.note,
+                  splitMethod: expense.splitMethod,
+                  splits: expense.splits,
+                  settled: true,
+                  personal: expense.personal,
+                )
+              : expense,
+        )
         .toList();
     _update(_state.copyWith(expenses: nextExpenses));
   }
@@ -684,7 +933,11 @@ class AppController extends ChangeNotifier {
 
   /// Update the current user's profile (display name, avatar emoji, color).
   /// Returns null on success or an error message on failure.
-  Future<String?> updateProfile({required String displayName, required String avatar, required String color}) async {
+  Future<String?> updateProfile({
+    required String displayName,
+    required String avatar,
+    required String color,
+  }) async {
     if (_activeAccount == null) {
       return 'Not signed in.';
     }
@@ -718,7 +971,8 @@ class AppController extends ChangeNotifier {
 
 String money(double value) => '\$${value.toStringAsFixed(2)}';
 
-String moneySigned(double value) => value >= 0 ? '+${money(value)}' : '-${money(value.abs())}';
+String moneySigned(double value) =>
+    value >= 0 ? '+${money(value)}' : '-${money(value.abs())}';
 
 String timeAgo(DateTime when) {
   final diff = DateTime.now().difference(when);
@@ -739,4 +993,3 @@ String timeAgo(DateTime when) {
   }
   return '${when.month}/${when.day}';
 }
-
